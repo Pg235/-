@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantum Hub - Physics & Logic Edition</title>
+    <title>Quantum Hub Pro - Ultra Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -16,7 +16,7 @@
             --accent: #ff00ff;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
         body {
             font-family: 'Cairo', sans-serif;
             background: var(--dark-bg);
@@ -66,7 +66,7 @@
             padding: 12px 5px; border: none; border-radius: 8px; font-family: 'Cairo';
             font-weight: bold; cursor: pointer; color: #fff; font-size: 14px; transition: 0.2s;
         }
-        .btn:active { transform: scale(0.9); }
+        .btn:active { transform: scale(0.95); opacity: 0.8; }
         .btn-num { background: var(--btn-num); }
         .btn-op { background: #161b22; color: var(--secondary); }
         .btn-del { background: #3d1a1a; color: var(--danger); }
@@ -77,7 +77,7 @@
             border-top: 1px solid #222;
         }
         .quick-btn { background: none; border: none; color: #888; cursor: pointer; font-size: 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .quick-btn:hover { color: var(--primary); }
+        .quick-btn:hover, .quick-btn:active { color: var(--primary); }
 
         .modal {
             display: none; position: fixed; inset: 0;
@@ -88,17 +88,18 @@
             border-radius: 20px; border: 1px solid var(--primary);
             padding: 20px; position: relative; max-height: 85vh; overflow-y: auto;
         }
-        .close-btn { position: absolute; top: 10px; right: 10px; color: var(--danger); cursor: pointer; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; background: #222; border-radius: 50%; z-index: 10; }
+        .close-btn { position: absolute; top: 10px; right: 10px; color: #fff; background: var(--danger); width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; border-radius: 50%; cursor: pointer; z-index: 100; font-weight: bold; }
 
-        /* Physics Elements */
-        .phys-input { width: 100%; padding: 10px; margin-bottom: 10px; background: #111; border: 1px solid #333; color: #fff; border-radius: 5px; }
-        canvas { display: block; margin: 10px auto; background: #000; border: 1px solid #333; width: 100%; height: auto; border-radius: 10px; }
+        /* Physics & Drawing Canvas */
+        .canvas-style { display: block; margin: 10px auto; background: #000; border: 1px solid #333; width: 100%; border-radius: 10px; cursor: crosshair; }
+        .white-bg { background: #fff !important; }
         
-        /* Game Elements */
+        .phys-input { width: 100%; padding: 10px; margin-bottom: 10px; background: #111; border: 1px solid #333; color: #fff; border-radius: 5px; }
+        
         .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
         .game-card { background: #1a1f2b; padding: 20px; border-radius: 10px; text-align: center; cursor: pointer; border: 1px solid #333; }
         .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 180px; margin: 0 auto; }
-        .ttt-box { width: 55px; height: 55px; background: #222; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; }
+        .ttt-box { width: 55px; height: 55px; background: #222; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -110,7 +111,7 @@
             <option value="ar">العربية</option>
             <option value="en">English</option>
         </select>
-        <button class="btn btn-op" style="padding:5px 10px" onclick="openModal('draw-modal')">🎨</button>
+        <button class="btn btn-op" style="padding:5px 12px" onclick="openModal('draw-modal')">🎨</button>
     </div>
 </header>
 
@@ -165,73 +166,77 @@
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal('physics-modal')">X</span>
         <h3 style="text-align:center" data-i18n="physTitle">المختبر الفيزيائي</h3>
-        <div style="margin-top:15px;">
-            <p style="font-size:12px; color:var(--primary); margin-bottom:10px;">محاكاة الجاذبية (اضغط لإضافة كرات):</p>
-            <canvas id="p-cvs" width="300" height="200" onclick="addPhysBall(event)"></canvas>
-            
-            <div style="margin-top:20px; border-top:1px solid #333; padding-top:15px;">
-                <p data-i18n="forceCalc">حساب القوة (F = m * a)</p>
-                <input type="number" id="pmass" placeholder="الكتلة (كجم)" class="phys-input">
-                <input type="number" id="pacc" placeholder="التسارع (م/ث²)" class="phys-input">
-                <button class="btn btn-eq" style="width:100%" onclick="calcForce()">احسب القوة</button>
-                <div id="p-res" style="text-align:center; margin-top:10px; color:var(--secondary); font-weight:bold;"></div>
-            </div>
+        <p style="font-size:11px; color:var(--primary); margin:10px 0;">محاكاة الجاذبية (المس الشاشة):</p>
+        <canvas id="p-cvs" class="canvas-style" height="200"></canvas>
+        <div style="margin-top:15px; border-top:1px solid #333; padding-top:10px;">
+            <p data-i18n="forceCalc" style="font-size:13px; margin-bottom:8px;">قانون القوة (F=m*a)</p>
+            <input type="number" id="pmass" placeholder="الكتلة (كجم)" class="phys-input">
+            <input type="number" id="pacc" placeholder="التسارع" class="phys-input">
+            <button class="btn btn-eq" style="width:100%" onclick="calcForce()">احسب نيوتن</button>
+            <div id="p-res" style="text-align:center; margin-top:10px; color:var(--secondary);"></div>
         </div>
     </div>
 </div>
 
-<!-- Other Modals (Same as before) -->
+<!-- Game Modal -->
 <div id="game-modal" class="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal('game-modal')">X</span>
-        <h3 style="text-align:center">مركز الألعاب</h3>
-        <div class="game-grid" id="game-menu">
-            <div class="game-card" onclick="playSnake()">🐍 Snake</div>
+        <h3 style="text-align:center">الألعاب</h3>
+        <div id="game-menu" class="game-grid">
+            <div class="game-card" onclick="playSnake()">🐍 الثعبان</div>
             <div class="game-card" onclick="playTTT()">❌ XO</div>
         </div>
         <div id="play-area" style="display:none; text-align:center;">
             <div id="game-screen"></div>
-            <button class="btn btn-op" style="margin-top:10px" onclick="resetGames()">عودة</button>
+            <button class="btn btn-op" style="margin-top:15px; width:100%" onclick="resetGames()">عودة للقائمة</button>
         </div>
     </div>
 </div>
 
+<!-- Timer Modal -->
 <div id="timer-modal" class="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal('timer-modal')">X</span>
-        <h3 style="text-align:center">المؤقت</h3>
-        <div id="t-disp" style="font-size:50px; text-align:center; color:var(--primary); font-family:'Orbitron'; margin:20px 0;">05:00</div>
+        <h3 style="text-align:center">مؤقت ذكي</h3>
+        <div id="t-disp" style="font-size:60px; text-align:center; color:var(--primary); font-family:'Orbitron'; margin:25px 0;">05:00</div>
         <div style="display:flex; gap:10px; justify-content:center;">
-            <button class="btn btn-op" onclick="startT()">ابدأ</button>
-            <button class="btn btn-del" onclick="stopT()">تصفير</button>
+            <button class="btn btn-op" style="flex:1" onclick="startT()">ابدأ</button>
+            <button class="btn btn-del" style="flex:1" onclick="stopT()">تصفير</button>
         </div>
     </div>
 </div>
 
+<!-- Drawing Modal (FIXED) -->
 <div id="draw-modal" class="modal">
-    <div class="modal-content" style="max-width:350px;">
+    <div class="modal-content">
         <span class="close-btn" onclick="closeModal('draw-modal')">X</span>
-        <canvas id="d-cvs" width="300" height="350" style="background:#fff;"></canvas>
-        <button class="btn btn-del" onclick="clearCanvas()" style="width:100%; margin-top:10px;">مسح</button>
+        <h3 style="text-align:center; margin-bottom:10px;">لوحة الرسم</h3>
+        <canvas id="d-cvs" class="canvas-style white-bg" height="350"></canvas>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+             <button class="btn btn-del" style="flex:1" onclick="clearCanvas()">مسح الكل</button>
+             <button class="btn btn-op" style="flex:1" onclick="closeModal('draw-modal')">حفظ وإغلاق</button>
+        </div>
     </div>
 </div>
 
+<!-- BMI Modal -->
 <div id="bmi-modal" class="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal('bmi-modal')">X</span>
-        <h3 style="text-align:center">حاسبة BMI</h3>
-        <input type="number" id="bw" placeholder="الوزن" class="phys-input" style="margin-top:15px">
+        <h3 style="text-align:center">كتلة الجسم</h3>
+        <input type="number" id="bw" placeholder="الوزن (كجم)" class="phys-input" style="margin-top:20px">
         <input type="number" id="bh" placeholder="الطول (سم)" class="phys-input">
-        <button class="btn btn-eq" style="width:100%" onclick="calcB()">احسب</button>
-        <div id="br" style="text-align:center; margin-top:10px;"></div>
+        <button class="btn btn-eq" style="width:100%" onclick="calcB()">احسب الحالة الصحية</button>
+        <div id="br" style="text-align:center; margin-top:15px; font-size:18px;"></div>
     </div>
 </div>
 
 <script>
     let expr = "";
     const translations = {
-        ar: { phys: "فيزياء", games: "ألعاب", timer: "مؤقت", bmi: "صحتي", physTitle: "المختبر الفيزيائي", forceCalc: "حساب القوة (نيوتن)" },
-        en: { phys: "Physics", games: "Games", timer: "Timer", bmi: "Health", physTitle: "Physics Lab", forceCalc: "Force Calculation" }
+        ar: { phys: "فيزياء", games: "ألعاب", timer: "مؤقت", bmi: "صحتي", physTitle: "مختبر كوانتوم", forceCalc: "قانون نيوتن الثاني" },
+        en: { phys: "Physics", games: "Games", timer: "Timer", bmi: "Health", physTitle: "Quantum Lab", forceCalc: "Newton's 2nd Law" }
     };
 
     function applyLang() {
@@ -242,93 +247,150 @@
         });
     }
 
-    // --- Calculator Logic ---
+    // --- Calculator Functions ---
     function ins(v) { expr += v; update(); }
-    function clr() { expr = ""; update(); }
+    function clr() { expr = ""; update(); document.getElementById('display-step').innerText = ""; }
     function del() { expr = expr.slice(0,-1); update(); }
     function update() { document.getElementById('display-val').innerText = expr || "0"; }
-    function calculate() { try { expr = eval(expr).toString(); update(); } catch(e) { expr=""; alert("Error"); } }
+    function calculate() { try { document.getElementById('display-step').innerText = expr + " ="; expr = eval(expr).toString(); update(); } catch(e) { expr=""; alert("خطأ في العملية"); } }
     function toBin() { try { expr = parseInt(eval(expr)).toString(2); update(); } catch(e){} }
 
-    // --- Physics Lab Simulation ---
+    // --- Fixed Drawing System ---
+    const dcvs = document.getElementById('d-cvs'), dctx = dcvs.getContext('2d');
+    let isDrawing = false;
+    
+    // Support for both mouse and touch
+    function getPos(e) {
+        const rect = dcvs.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: clientX - rect.left, y: clientY - rect.top };
+    }
+
+    function startDrawing(e) { isDrawing = true; draw(e); }
+    function stopDrawing() { isDrawing = false; dctx.beginPath(); }
+    function draw(e) {
+        if(!isDrawing) return;
+        e.preventDefault();
+        const pos = getPos(e);
+        dctx.lineWidth = 5;
+        dctx.lineCap = 'round';
+        dctx.strokeStyle = '#000';
+        dctx.lineTo(pos.x, pos.y);
+        dctx.stroke();
+        dctx.beginPath();
+        dctx.moveTo(pos.x, pos.y);
+    }
+
+    dcvs.addEventListener('mousedown', startDrawing);
+    dcvs.addEventListener('mousemove', draw);
+    dcvs.addEventListener('mouseup', stopDrawing);
+    dcvs.addEventListener('touchstart', startDrawing);
+    dcvs.addEventListener('touchmove', draw);
+    dcvs.addEventListener('touchend', stopDrawing);
+
+    function clearCanvas() { dctx.clearRect(0,0,dcvs.width,dcvs.height); }
+
+    // --- Physics Simulation ---
     const pcvs = document.getElementById('p-cvs'), pctx = pcvs.getContext('2d');
     let pBalls = [];
-    function addPhysBall(e) {
-        pBalls.push({ x: e.offsetX, y: e.offsetY, vy: 2, vx: (Math.random()-0.5)*4, r: 10, c: `hsl(${Math.random()*360}, 70%, 50%)` });
-    }
-    function updatePhys() {
-        pctx.fillStyle = '#000'; pctx.fillRect(0,0,300,200);
+    pcvs.addEventListener('mousedown', (e) => {
+        const rect = pcvs.getBoundingClientRect();
+        pBalls.push({ x: e.clientX - rect.left, y: e.clientY - rect.top, vy: 2, vx: (Math.random()-0.5)*6, r: 12, c: `hsl(${Math.random()*360}, 80%, 50%)` });
+    });
+
+    function engine() {
+        pctx.fillStyle = 'rgba(0,0,0,0.2)'; pctx.fillRect(0,0,pcvs.width,pcvs.height);
         pBalls.forEach(b => {
-            b.vy += 0.2; b.x += b.vx; b.y += b.vy;
-            if(b.y + b.r > 200) { b.y = 200 - b.r; b.vy *= -0.7; }
-            if(b.x + b.r > 300 || b.x - b.r < 0) b.vx *= -1;
+            b.vy += 0.25; b.x += b.vx; b.y += b.vy;
+            if(b.y + b.r > pcvs.height) { b.y = pcvs.height - b.r; b.vy *= -0.8; }
+            if(b.x + b.r > pcvs.width || b.x - b.r < 0) b.vx *= -1;
             pctx.beginPath(); pctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
             pctx.fillStyle = b.c; pctx.fill();
         });
-        requestAnimationFrame(updatePhys);
+        requestAnimationFrame(engine);
     }
     function calcForce() {
         let m = document.getElementById('pmass').value, a = document.getElementById('pacc').value;
-        if(m && a) document.getElementById('p-res').innerText = (m*a) + " Newton (نيوتن)";
+        if(m && a) document.getElementById('p-res').innerText = "القوة المكتسبة: " + (m*a) + " N";
     }
-    updatePhys();
+    engine();
 
-    // --- Snake & Games ---
+    // --- Snake Game ---
     function playSnake() {
         document.getElementById('game-menu').style.display='none';
         document.getElementById('play-area').style.display='block';
         const s = document.getElementById('game-screen');
-        s.innerHTML = '<canvas id="s-cvs" width="250" height="250"></canvas>';
+        s.innerHTML = '<canvas id="s-cvs" width="280" height="280" style="background:#000; border:2px solid #333;"></canvas>';
         const cvs = document.getElementById('s-cvs'), ct = cvs.getContext('2d');
-        let snake = [{x:10,y:10}], food={x:5,y:5}, dx=1, dy=0;
+        let snake = [{x:10,y:10}], food={x:5,y:5}, dx=1, dy=0, score=0;
         window.gInt = setInterval(()=>{
             let head = {x:snake[0].x+dx, y:snake[0].y+dy};
-            if(head.x<0||head.x>=20||head.y<0||head.y>=20) return resetGames();
+            if(head.x<0||head.x>=20||head.y<0||head.y>=20||snake.some(s=>s.x===head.x&&s.y===head.y)) return resetGames();
             snake.unshift(head);
-            if(head.x===food.x&&head.y===food.y) food={x:Math.floor(Math.random()*20),y:Math.floor(Math.random()*20)}; else snake.pop();
-            ct.fillStyle='#000'; ct.fillRect(0,0,250,250);
-            ct.fillStyle='#0f8'; snake.forEach(p=>ct.fillRect(p.x*12.5, p.y*12.5, 11, 11));
-            ct.fillStyle='#f05'; ct.fillRect(food.x*12.5, food.y*12.5, 11, 11);
+            if(head.x===food.x&&head.y===food.y) { score++; food={x:Math.floor(Math.random()*20),y:Math.floor(Math.random()*20)}; } else snake.pop();
+            ct.fillStyle='#000'; ct.fillRect(0,0,280,280);
+            ct.fillStyle='#0f8'; snake.forEach(p=>ct.fillRect(p.x*14, p.y*14, 13, 13));
+            ct.fillStyle='#f05'; ct.fillRect(food.x*14, food.y*14, 13, 13);
         },150);
         document.onkeydown=(e)=>{
             if(e.key==='ArrowUp'&&dy===0){dx=0;dy=-1} if(e.key==='ArrowDown'&&dy===0){dx=0;dy=1}
             if(e.key==='ArrowLeft'&&dx===0){dx=-1;dy=0} if(e.key==='ArrowRight'&&dx===0){dx=1;dy=0}
         };
     }
+
+    // --- Tic Tac Toe ---
     function playTTT() {
         document.getElementById('game-menu').style.display='none';
         document.getElementById('play-area').style.display='block';
         const s = document.getElementById('game-screen');
-        s.innerHTML = '<div class="ttt-grid"></div>';
-        for(let i=0; i<9; i++){
+        s.innerHTML = '<div class="ttt-grid" id="ttt"></div>';
+        let grid = document.getElementById('ttt'), turn = 'X', cells = Array(9).fill('');
+        for(let i=0; i<9; i++) {
             let b = document.createElement('div'); b.className='ttt-box';
-            b.onclick=()=>{if(!b.innerText){b.innerText='X';b.style.color='#00f2ff'}};
-            s.querySelector('.ttt-grid').appendChild(b);
+            b.onclick=()=>{ 
+                if(!cells[i]){ 
+                    cells[i]=turn; b.innerText=turn; b.style.color=turn==='X'?'var(--primary)':'var(--secondary)';
+                    if(checkW(cells)) { alert(turn + " فاز!"); resetGames(); }
+                    turn = turn==='X'?'O':'X';
+                } 
+            };
+            grid.appendChild(b);
         }
     }
+    function checkW(c) { 
+        const lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+        return lines.some(l => c[l[0]] && c[l[0]]===c[l[1]] && c[l[0]]===c[l[2]]);
+    }
+
     function resetGames() { clearInterval(window.gInt); document.getElementById('game-menu').style.display='grid'; document.getElementById('play-area').style.display='none'; }
 
-    // --- BMI & Timer & Draw ---
+    // --- Extras ---
     function calcB() {
         let w=document.getElementById('bw').value, h=document.getElementById('bh').value/100;
-        if(w&&h) document.getElementById('br').innerText = "BMI: " + (w/(h*h)).toFixed(1);
+        if(w&&h) {
+            let bmi = (w/(h*h)).toFixed(1);
+            let msg = bmi < 18 ? "نقص وزن" : bmi < 25 ? "مثالي" : "زيادة";
+            document.getElementById('br').innerText = `النتيجة: ${bmi} (${msg})`;
+        }
     }
+
     let tInt, tS=300;
     function startT() {
         clearInterval(tInt); tInt=setInterval(()=>{
-            if(tS<=0) return clearInterval(tInt); tS--;
+            if(tS<=0) { clearInterval(tInt); alert("انتهى الوقت!"); return; } tS--;
             document.getElementById('t-disp').innerText = Math.floor(tS/60).toString().padStart(2,'0')+":"+(tS%60).toString().padStart(2,'0');
         },1000);
     }
     function stopT() { clearInterval(tInt); tS=300; document.getElementById('t-disp').innerText="05:00"; }
-    
-    const dcvs=document.getElementById('d-cvs'), dctx=dcvs.getContext('2d');
-    let drw=false;
-    dcvs.onmousedown=()=>{drw=true}; dcvs.onmouseup=()=>{drw=false; dctx.beginPath();};
-    dcvs.onmousemove=(e)=>{ if(!drw)return; dctx.lineWidth=4; dctx.lineCap='round'; dctx.lineTo(e.offsetX, e.offsetY); dctx.stroke(); dctx.beginPath(); dctx.moveTo(e.offsetX, e.offsetY); };
-    function clearCanvas() { dctx.clearRect(0,0,300,350); }
 
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function openModal(id) { 
+        document.getElementById(id).style.display = 'flex'; 
+        if(id==='draw-modal') { // Reset canvas size on open
+            dcvs.width = dcvs.offsetWidth;
+            dcvs.height = 350;
+        }
+    }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; resetGames(); }
 </script>
 </body>

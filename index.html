@@ -1,379 +1,205 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <title>آلة حاسبة Quantum Gemini Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-dark: #070912;
-            --glass-bg: rgba(20, 25, 45, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --neon-primary: #00ffd5;
-            --neon-secondary: #7c4dff;
-            --neon-accent: #ff007a;
-            --text-main: #ffffff;
-            --text-dim: #94a3b8;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آلة علمية AI</title>
 
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:white;
+  text-align:center;
+}
 
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(124, 77, 255, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 90%, rgba(0, 255, 213, 0.1) 0%, transparent 40%);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--text-main);
-            overflow: hidden;
-        }
+h1{
+  padding:15px;
+  background:#020617;
+  font-size:20px;
+}
 
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            height: 95vh;
-            display: flex;
-            flex-direction: column;
-            padding: 15px;
-            gap: 15px;
-        }
+select{
+  margin:10px;
+  padding:8px;
+  border-radius:8px;
+}
 
-        .screen-glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border);
-            border-radius: 32px;
-            padding: 25px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
-            display: flex;
-            flex-direction: column;
-            min-height: 240px;
-        }
+.calculator{
+  width:340px;
+  margin:20px auto;
+  padding:15px;
+  background:#020617;
+  border-radius:20px;
+  box-shadow:0 0 20px #000;
+}
 
-        .history-view {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
-            color: var(--text-dim);
-            height: 30px;
-            text-align: left;
-            direction: ltr;
-            opacity: 0.8;
-        }
+#display{
+  width:100%;
+  height:65px;
+  font-size:22px;
+  text-align:right;
+  padding:10px;
+  border:none;
+  border-radius:12px;
+  margin-bottom:10px;
+}
 
-        .display-main {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 40px;
-            text-align: left;
-            direction: ltr;
-            color: var(--neon-primary);
-            text-shadow: 0 0 20px rgba(0, 255, 213, 0.3);
-            margin: 10px 0;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
+button{
+  width:22%;
+  height:55px;
+  margin:4px;
+  font-size:18px;
+  border:none;
+  border-radius:12px;
+  background:#1e293b;
+  color:white;
+}
 
-        .ai-status-container {
-            border-top: 1px solid rgba(255,255,255,0.05);
-            margin-top: auto;
-            padding-top: 12px;
-        }
+button:hover{
+  background:#334155;
+}
 
-        .ai-status-bar {
-            font-size: 12px;
-            color: #cbd5e1;
-            line-height: 1.5;
-            max-height: 100px;
-            overflow-y: auto;
-        }
+.ai{ background:#22c55e; }
+.mic{ background:#0ea5e9; }
 
-        .grid-pad {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            flex-grow: 1;
-            margin-bottom: 70px; /* مساحة للإعلان */
-        }
-
-        button {
-            border: none;
-            border-radius: 20px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: rgba(255,255,255,0.03);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid transparent;
-        }
-
-        button:active { transform: scale(0.92); }
-
-        .btn-op { color: var(--neon-primary); background: rgba(0, 255, 213, 0.05); }
-        .btn-ai-main { 
-            grid-column: span 2; 
-            background: linear-gradient(135deg, var(--neon-secondary), #4f46e5);
-            font-weight: 700;
-            font-size: 13px;
-        }
-        .btn-eq { background: var(--neon-primary); color: #000; font-weight: 800; font-size: 26px; }
-        .btn-func { font-size: 13px; color: var(--text-dim); }
-        .btn-accent { color: var(--neon-accent); background: rgba(255, 0, 122, 0.05); }
-
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(15px);
-        }
-
-        .modal-content {
-            background: #0f172a;
-            padding: 30px;
-            border-radius: 28px;
-            width: 90%;
-            max-width: 400px;
-            border: 1px solid var(--glass-border);
-        }
-
-        textarea {
-            width: 100%;
-            height: 120px;
-            background: #1e293b;
-            border: 1px solid #334155;
-            color: white;
-            padding: 15px;
-            border-radius: 16px;
-            font-family: 'Cairo';
-            margin: 20px 0;
-            outline: none;
-        }
-
-        .loading-ring {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border: 2px solid var(--neon-primary);
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
-            margin-left: 8px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .ai-badge {
-            background: rgba(124, 77, 255, 0.2);
-            color: var(--neon-secondary);
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 10px;
-            font-weight: 800;
-            margin-left: 5px;
-        }
-
-        /* AdMob Space */
-        #ad-wrapper {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            height: 60px;
-            background: #000;
-            z-index: 10000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-top: 1px solid var(--neon-primary);
-        }
-    </style>
+</style>
 </head>
+
 <body>
 
-<div class="app-container">
-    <div class="screen-glass">
-        <div class="history-view" id="history"></div>
-        <div class="display-main" id="out">0</div>
-        <div class="ai-status-container">
-            <div style="display: flex; align-items: center; margin-bottom: 5px;">
-                <span class="ai-badge">Gemini AI</span>
-                <span id="ai-loading" style="display:none" class="loading-ring"></span>
-            </div>
-            <div class="ai-status-bar" id="ai-box">
-                مرحباً! أنا جاهز لشرح أي عملية رياضية أو حل المسائل اللفظية.
-            </div>
-        </div>
-    </div>
+<h1 id="title">آلة علمية مدعومة بالذكاء الاصطناعي</h1>
 
-    <div class="grid-pad">
-        <button class="btn-ai-main" onclick="openAIModal()">✨ حل مسألة لفظية</button>
-        <button class="btn-ai-main" style="background: var(--bg-dark); border: 1px solid var(--neon-secondary)" onclick="generateStudyPlan()">✨ خطة دراسة</button>
-        
-        <button class="btn-accent" onclick="clearAll()">AC</button>
-        <button class="btn-func" onclick="add('Math.sin(')">sin</button>
-        <button class="btn-func" onclick="add('Math.cos(')">cos</button>
-        <button class="btn-func" onclick="add('Math.tan(')">tan</button>
-        <button class="btn-op" onclick="add('/')">÷</button>
-        <button class="btn-accent" onclick="back()">⌫</button>
+<select onchange="changeLang(this.value)">
+  <option value="ar">العربية</option>
+  <option value="en">English</option>
+</select>
 
-        <button onclick="add('7')">7</button>
-        <button onclick="add('8')">8</button>
-        <button onclick="add('9')">9</button>
-        <button class="btn-op" onclick="add('*')">×</button>
-        <button class="btn-func" onclick="getLatex()">✨ LaTeX</button>
+<div class="calculator">
 
-        <button onclick="add('4')">4</button>
-        <button onclick="add('5')">5</button>
-        <button onclick="add('6')">6</button>
-        <button class="btn-op" onclick="add('-')">−</button>
-        <button class="btn-func" onclick="askGeminiToExplain()">✨ شرح</button>
+<input id="display" readonly>
 
-        <button onclick="add('1')">1</button>
-        <button onclick="add('2')">2</button>
-        <button onclick="add('3')">3</button>
-        <button class="btn-op" onclick="add('+')">+</button>
-        <button class="btn-func" onclick="add('Math.sqrt(')">√</button>
+<br>
 
-        <button onclick="add('0')">0</button>
-        <button onclick="add('.')">.</button>
-        <button class="btn-func" onclick="add('(')">(</button>
-        <button class="btn-func" onclick="add(')')">)</button>
-        <button class="btn-eq" onclick="calc()">=</button>
-    </div>
+<button onclick="add('7')">7</button>
+<button onclick="add('8')">8</button>
+<button onclick="add('9')">9</button>
+<button onclick="add('/')">÷</button>
+
+<button onclick="add('4')">4</button>
+<button onclick="add('5')">5</button>
+<button onclick="add('6')">6</button>
+<button onclick="add('*')">×</button>
+
+<button onclick="add('1')">1</button>
+<button onclick="add('2')">2</button>
+<button onclick="add('3')">3</button>
+<button onclick="add('-')">−</button>
+
+<button onclick="add('0')">0</button>
+<button onclick="add('.')">.</button>
+<button onclick="calculate()">=</button>
+<button onclick="add('+')">+</button>
+
+<button onclick="add('Math.sin(')">sin</button>
+<button onclick="add('Math.cos(')">cos</button>
+<button onclick="add('Math.tan(')">tan</button>
+<button onclick="add('Math.sqrt(')">√</button>
+
+<button onclick="clearDisplay()">AC</button>
+<button onclick="back()">⌫</button>
+
+<button class="ai" onclick="runAI()">AI</button>
+<button class="mic" onclick="startVoice()">🎤</button>
+
 </div>
 
-<div id="ad-wrapper">
-    <span style="color: #444; font-size: 10px; font-family: sans-serif;">AD UNIT: ca-app-pub-9320473551555720/7716550551</span>
-</div>
-
-<!-- Modals -->
-<div id="ai-modal" class="modal">
-    <div class="modal-content">
-        <h3 style="color: var(--neon-secondary);">✨ ذكاء Gemini</h3>
-        <textarea id="ai-input" placeholder="اكتب مسألتك هنا... مثلاً: قطار يسير بسرعة 100 كم..."></textarea>
-        <div style="display: flex; gap: 10px;">
-            <button onclick="closeAIModal()" style="flex:1; background: #1e293b; padding: 12px;">إلغاء</button>
-            <button onclick="solveWordProblem()" style="flex:2; background: var(--neon-secondary); padding: 12px;">تحليل وحل</button>
-        </div>
-    </div>
-</div>
-ca-app-pub-9320473551555720~5642193199
 <script>
-    const apiKey = ""; 
-    let currentExp = "";
-    let historyStack = [];
-    const outDisplay = document.getElementById('out');
-    const aiBox = document.getElementById('ai-box');
-    const loadingRing = document.getElementById('ai-loading');
+let display = document.getElementById("display");
+let currentLang = "ar";
 
-    function add(v) { currentExp += v; render(); }
-    function render() {
-        let p = currentExp.replace(/Math\.sin\(/g,'sin(').replace(/Math\.cos\(/g,'cos(').replace(/Math\.tan\(/g,'tan(').replace(/Math\.sqrt\(/g,'√(').replace(/\*/g,'×').replace(/\//g,'÷');
-        outDisplay.innerText = p || "0";
-    }
-    function clearAll() { currentExp = ""; render(); aiBox.innerText = "تم البدء من جديد."; }
-    function back() { currentExp = currentExp.slice(0, -1); render(); }
-    function calc() {
-        try {
-            let res = eval(currentExp);
-            document.getElementById('history').innerText = outDisplay.innerText + " =";
-            historyStack.push(outDisplay.innerText + " = " + res);
-            currentExp = res.toString();
-            render();
-            aiBox.innerText = "تمت العملية. اضغط 'شرح' لفهم الخطوات.";
-        } catch(e) { aiBox.innerText = "تأكد من صحة المعادلة."; }
-    }
+/* أزرار */
+function add(v){ display.value += v; }
+function clearDisplay(){ display.value = ""; }
+function back(){ display.value = display.value.slice(0,-1); }
 
-    async function callGemini(prompt, sys) {
-        loadingRing.style.display = "inline-block";
-        aiBox.innerText = "جاري التحليل...";
-        try {
-            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }],
-                    systemInstruction: { parts: [{ text: sys }] }
-                })
-            });
-            const d = await r.json();
-            loadingRing.style.display = "none";
-            let text = d.candidates?.[0]?.content?.parts?.[0]?.text || "لم أستطع المعالجة.";
-            return text.replace(/\*/g, '').replace(/#/g, ''); // تنظيف النص من علامات Markdown
-        } catch (e) {
-            loadingRing.style.display = "none";
-            return "فشل الاتصال بالذكاء الاصطناعي.";
-        }
-    }
+function calculate(){
+  try{
+    display.value = eval(display.value);
+  }catch{
+    display.value = "خطأ";
+  }
+}
 
-    async function speak(t) {
-        try {
-            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: t }] }],
-                    generationConfig: {
-                        responseModalities: ["AUDIO"],
-                        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } }
-                    }
-                })
-            });
-            const d = await r.json();
-            const b64 = d.candidates[0].content.parts[0].inlineData.data;
-            const bin = atob(b64);
-            const arr = new Uint8Array(bin.length);
-            for (let i=0; i<bin.length; i++) arr[i] = bin.charCodeAt(i);
-            const url = URL.createObjectURL(new Blob([arr], {type: "audio/wav"}));
-            new Audio(url).play();
-        } catch(e) {}
-    }
+/* تغيير اللغة */
+function changeLang(lang){
+  currentLang = lang;
 
-    async function askGeminiToExplain() {
-        if (!currentExp) return;
-        const res = await callGemini("اشرح العملية التالية ونتيجتها باختصار: " + outDisplay.innerText, "أنت معلم رياضيات تشرح بأسلوب بسيط ومختصر بالعربية.");
-        aiBox.innerText = res;
-        speak(res);
-    }
+  if(lang === "ar"){
+    document.getElementById("title").innerText = "آلة علمية مدعومة بالذكاء الاصطناعي";
+  }else{
+    document.getElementById("title").innerText = "AI Scientific Calculator";
+  }
+}
 
-    async function solveWordProblem() {
-        const input = document.getElementById('ai-input').value;
-        if (!input) return;
-        closeAIModal();
-        const resText = await callGemini(input, "حول المسألة اللفظية لمعادلة جافاسكريبت. أجب بصيغة JSON فقط: {'equation': '...', 'explanation': '...'}");
-        try {
-            const data = JSON.parse(resText);
-            currentExp = data.equation;
-            render();
-            aiBox.innerText = data.explanation;
-            speak(data.explanation);
-        } catch(e) { aiBox.innerText = "حاول صياغة المسألة بشكل أوضح."; }
-    }
+/* AI */
+async function runAI(){
+  let input = display.value;
 
-    async function generateStudyPlan() {
-        if (historyStack.length === 0) { aiBox.innerText = "قم ببعض العمليات أولاً!"; return; }
-        const res = await callGemini("اقترح مواضيع للدراسة بناءً على: " + historyStack.join(", "), "أنت مستشار تعليمي يقترح 3 نقاط دراسية قصيرة بالعربية.");
-        aiBox.innerText = res;
-    }
+  if(!input){
+    display.value = currentLang === "ar" ? "اكتب شي" : "Type something";
+    return;
+  }
 
-    async function getLatex() {
-        if (!currentExp) return;
-        const res = await callGemini("حول هذه العملية لـ LaTeX: " + outDisplay.innerText, "أعطني كود LaTeX فقط بدون كلام.");
-        aiBox.innerText = "صيغة LaTeX: " + res;
-    }
+  display.value = "AI...";
 
-    function openAIModal() { document.getElementById('ai-modal').style.display = 'flex'; }
-    function closeAIModal() { document.getElementById('ai-modal').style.display = 'none'; }
+  try{
+    let res = await fetch("https://api.openai.com/v1/chat/completions",{
+      method:"POST",
+      headers:{
+        "Authorization":"Bearer YOUR_API_KEY",
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        model:"gpt-4o-mini",
+        messages:[
+          {
+            role:"system",
+            content: currentLang === "ar"
+              ? "احسب واعط النتيجة فقط"
+              : "Solve and give only result"
+          },
+          {role:"user",content:input}
+        ]
+      })
+    });
+
+    let data = await res.json();
+    display.value = data.choices[0].message.content;
+
+  }catch{
+    display.value = "خطأ AI";
+  }
+}
+
+/* مايك */
+function startVoice(){
+  let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+  recognition.lang = currentLang === "ar" ? "ar-SA" : "en-US";
+
+  recognition.start();
+
+  recognition.onstart = () => {
+    display.value = "🎤...";
+  };
+
+  recognition.onresult = (event) => {
+    display.value = event.results[0][0].transcript;
+  };
+}
 </script>
 
 </body>
-    </html>
+</html>

@@ -3,147 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Quantum Hub Pro | النسخة الشاملة المحدثة</title>
+    <title>Quantum Hub Pro | النسخة المستقرة</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #00f2ff;
-            --secondary: #00ff88;
-            --danger: #ff003c;
-            --dark-bg: #05070a;
-            --panel: #0f121a;
-            --btn-num: #1c212d;
-            --btn-sci: #252d3d;
-            --accent: #ff00ff;
+            --primary: #00f2ff; --secondary: #00ff88; --danger: #ff003c;
+            --dark-bg: #05070a; --panel: #0f121a; --btn-num: #1c212d;
+            --btn-sci: #252d3d; --accent: #ff00ff;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
         
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: var(--dark-bg);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            color: #fff;
-            overflow: hidden;
-        }
+        body { font-family: 'Cairo', sans-serif; background: var(--dark-bg); height: 100vh; display: flex; flex-direction: column; color: #fff; overflow: hidden; }
 
-        header {
-            padding: 12px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #0a0d14;
-            border-bottom: 2px solid var(--primary);
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
-            z-index: 10;
-        }
-
+        header { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; background: #0a0d14; border-bottom: 2px solid var(--primary); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); z-index: 10; }
         .logo { font-family: 'Orbitron'; color: var(--primary); font-size: 18px; text-shadow: 0 0 10px var(--primary); letter-spacing: 1px; }
         
-        #lang-select {
-            background: #1a1f2b; color: var(--primary); border: 1px solid var(--primary);
-            border-radius: 8px; padding: 6px 10px; font-size: 13px; cursor: pointer; outline: none;
-        }
+        #lang-select { background: #1a1f2b; color: var(--primary); border: 1px solid var(--primary); border-radius: 8px; padding: 6px 10px; font-size: 13px; cursor: pointer; outline: none; }
 
-        .main-content {
-            flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px;
-            overflow-y: auto;
-            background: radial-gradient(circle at center, #0f172a 0%, #05070a 100%);
-        }
+        .main-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; overflow-y: auto; background: radial-gradient(circle at center, #0f172a 0%, #05070a 100%); }
 
         /* Calculator Styles */
-        .calc-container {
-            width: 100%; max-width: 420px; background: var(--panel);
-            padding: 15px; border-radius: 25px; border: 1px solid #333;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-        }
-
-        .screen {
-            background: #000; border-radius: 18px; padding: 15px;
-            margin-bottom: 15px; border: 1px solid var(--primary);
-            text-align: left; direction: ltr;
-            box-shadow: inset 0 0 10px rgba(0, 242, 255, 0.1);
-        }
+        .calc-container { width: 100%; max-width: 420px; background: var(--panel); padding: 15px; border-radius: 25px; border: 1px solid #333; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .screen { background: #000; border-radius: 18px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--primary); text-align: left; direction: ltr; box-shadow: inset 0 0 10px rgba(0, 242, 255, 0.1); }
         #display-val { font-family: 'Orbitron'; font-size: 32px; color: #fff; min-height: 45px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
         #display-step { font-size: 14px; color: var(--primary); opacity: 0.6; height: 20px; }
-
         .calc-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-        
-        .btn {
-            height: 55px; border: none; border-radius: 12px; font-family: 'Cairo', sans-serif;
-            font-weight: bold; cursor: pointer; color: #fff; font-size: 14px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; justify-content: center; align-items: center;
-        }
+        .btn { height: 55px; border: none; border-radius: 12px; font-family: 'Cairo', sans-serif; font-weight: bold; cursor: pointer; color: #fff; font-size: 14px; transition: all 0.2s; display: flex; justify-content: center; align-items: center; }
         .btn:active { transform: scale(0.9); filter: brightness(1.5); }
-        
         .btn-num { background: var(--btn-num); font-size: 20px; }
         .btn-op { background: #161b22; color: var(--secondary); font-size: 20px; }
         .btn-sci { background: var(--btn-sci); color: var(--primary); font-size: 12px; }
         .btn-del { background: #3d1a1a; color: var(--danger); }
-        .btn-eq { background: linear-gradient(135deg, var(--primary), #0066ff); grid-column: span 2; font-size: 24px; box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); }
+        .btn-eq { background: linear-gradient(135deg, var(--primary), #0066ff); grid-column: span 2; font-size: 24px; }
 
         /* Navigation Bar */
-        .bottom-bar {
-            background: #0a0d14; padding: 10px 5px; display: flex; justify-content: space-around;
-            border-top: 1px solid #222; width: 100%; flex-wrap: wrap; gap: 5px;
-        }
+        .bottom-bar { background: #0a0d14; padding: 10px 5px; display: flex; justify-content: space-around; border-top: 1px solid #222; width: 100%; flex-wrap: wrap; gap: 5px; }
         .quick-btn { background: none; border: none; color: #888; cursor: pointer; font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: 0.3s; min-width: 45px; flex: 1;}
         .quick-btn span:first-child { font-size: 20px; margin-bottom: 2px; }
         .quick-btn:hover, .quick-btn.active { color: var(--primary); }
 
         /* Modals */
-        .modal {
-            display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center;
-            backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            background: var(--panel); width: 95%; max-width: 500px;
-            border-radius: 25px; border: 1px solid var(--primary);
-            padding: 20px; position: relative; max-height: 90vh; overflow-y: auto;
-        }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-content { background: var(--panel); width: 95%; max-width: 500px; border-radius: 25px; border: 1px solid var(--primary); padding: 20px; position: relative; max-height: 90vh; overflow-y: auto; }
         .close-btn { position: absolute; top: 15px; right: 15px; color: #fff; background: var(--danger); width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; border-radius: 50%; cursor: pointer; z-index: 101; font-weight: bold; }
 
-        /* Games Grid */
+        /* Games & Inputs */
         .game-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; }
-        .game-card { 
-            background: #1a1f2b; padding: 15px 5px; border-radius: 15px; text-align: center; cursor: pointer; 
-            border: 1px solid #333; transition: 0.3s;
-        }
-        .game-card:hover { border-color: var(--primary); transform: translateY(-3px); background: #242b3d; }
+        .game-card { background: #1a1f2b; padding: 15px 5px; border-radius: 15px; text-align: center; cursor: pointer; border: 1px solid #333; transition: 0.3s; }
+        .game-card:hover { border-color: var(--primary); transform: translateY(-3px); }
         .game-card i { font-size: 28px; display: block; margin-bottom: 8px; }
         .game-card p { font-size: 12px; font-weight: bold; }
         
-        /* Canvas */
         .canvas-style { display: block; margin: 10px auto; background: #000; border: 2px solid #333; width: 100%; border-radius: 15px; touch-action: none; }
         .white-bg { background: #fff !important; cursor: crosshair; }
+        input, select { width: 100%; padding: 14px; margin: 8px 0; background: #1a1f2b; border: 1px solid var(--primary); color: #fff; border-radius: 12px; outline: none; font-size: 16px; }
 
-        input, select {
-            width: 100%; padding: 14px; margin: 8px 0; background: #1a1f2b; border: 1px solid var(--primary); color: #fff; border-radius: 12px; outline: none; font-size: 16px;
-        }
+        footer { text-align: center; padding: 10px; border-top: 1px solid #111; width: 100%; background: #05070a; display: flex; justify-content: center; align-items: center; gap: 15px; }
+        .angle-btn { background: linear-gradient(135deg, var(--danger), #ffaa00); color: white; border: none; padding: 5px 20px; border-radius: 20px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; font-size: 14px; letter-spacing: 2px; }
 
-        /* Replaced Footer with Angle Toggle */
-        footer {
-            text-align: center; padding: 10px; border-top: 1px solid #111; width: 100%; background: #05070a; display: flex; justify-content: center; align-items: center; gap: 15px;
-        }
-        .angle-btn {
-            background: linear-gradient(135deg, var(--danger), #ffaa00); color: white; border: none; padding: 5px 20px; border-radius: 20px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; font-size: 14px; letter-spacing: 2px;
-        }
-
-        /* Specific Game Layouts */
         #ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 200px; margin: 20px auto; }
         .ttt-cell { width: 60px; height: 60px; background: #1a1f2b; display: flex; align-items: center; justify-content: center; font-size: 30px; font-family: 'Orbitron'; border-radius: 10px; cursor: pointer; border: 1px solid #333; }
         
-        /* Toolbar inside draw */
         .draw-tools { display: flex; gap: 10px; justify-content: center; align-items: center; margin-bottom: 10px; background: #1a1f2b; padding: 10px; border-radius: 12px; }
         .draw-tools input[type="color"] { width: 40px; height: 40px; padding: 0; margin: 0; border: none; border-radius: 5px; cursor: pointer; }
-        
-        /* Task List */
         .task-item { display: flex; justify-content: space-between; background: #1a1f2b; padding: 10px; border-radius: 8px; margin-bottom: 5px; align-items: center;}
-        .task-item.done { text-decoration: line-through; opacity: 0.5; }
-
     </style>
 </head>
 <body id="body-tag">
@@ -155,7 +79,7 @@
             <option value="ar">العربية</option>
             <option value="en">English</option>
         </select>
-        <button class="btn btn-sci" onclick="openModal('draw-modal')" style="height:35px; padding: 0 15px;" data-key="draw_btn">🎨 رسم</button>
+        <button class="btn btn-sci" onclick="openModal('draw-modal')" style="height:35px; padding: 0 15px;">🎨 رسم</button>
     </div>
 </header>
 
@@ -211,38 +135,38 @@
 </main>
 
 <div class="bottom-bar">
-    <button class="quick-btn" onclick="openModal('physics-modal')"><span>⚛️</span><span data-key="nav_physics">فيزياء</span></button>
-    <button class="quick-btn" onclick="openModal('game-modal')"><span>🎮</span><span data-key="nav_games">ألعاب</span></button>
-    <button class="quick-btn active" onclick="location.reload()"><span>🔢</span><span data-key="nav_calc">حاسبة</span></button>
-    <button class="quick-btn" onclick="openModal('timer-modal')"><span>⏱️</span><span data-key="nav_timer">مؤقت</span></button>
-    <button class="quick-btn" onclick="openModal('bmi-modal')"><span>💪</span><span data-key="nav_health">صحة</span></button>
+    <button class="quick-btn" onclick="openModal('physics-modal')"><span>⚛️</span><span>فيزياء</span></button>
+    <button class="quick-btn" onclick="openModal('game-modal')"><span>🎮</span><span>ألعاب</span></button>
+    <button class="quick-btn active" onclick="location.reload()"><span>🔢</span><span>حاسبة</span></button>
+    <button class="quick-btn" onclick="openModal('timer-modal')"><span>⏱️</span><span>مؤقت</span></button>
+    <button class="quick-btn" onclick="openModal('bmi-modal')"><span>💪</span><span>صحة</span></button>
     <button class="quick-btn" onclick="openModal('currency-modal')"><span>💱</span><span>عملات</span></button>
     <button class="quick-btn" onclick="openModal('tasks-modal')"><span>📝</span><span>مهام</span></button>
 </div>
 
 <footer>
-    <span style="font-size: 12px; opacity: 0.7;" data-key="angle_mode">نظام الزوايا:</span>
+    <span style="font-size: 12px; opacity: 0.7;">نظام الزوايا:</span>
     <button id="angle-toggle" class="angle-btn" onclick="toggleAngleMode()">DEG</button>
 </footer>
 
 <div id="game-modal" class="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal('game-modal')">✕</span>
-        <h3 style="text-align:center; color:var(--primary)" data-key="game_title">مركز الألعاب</h3>
+        <h3 style="text-align:center; color:var(--primary)">مركز الألعاب</h3>
         <div id="game-menu" class="game-grid">
             <div class="game-card" onclick="startTTT()"><i>❌</i><p>XO</p></div>
-            <div class="game-card" onclick="startClicker()"><i>👆</i><p data-key="g_click">تحدي النقر</p></div>
-            <div class="game-card" onclick="startMath()"><i>➕</i><p data-key="g_math">عبقري الحساب</p></div>
-            <div class="game-card" onclick="startRPS()"><i>✊</i><p data-key="g_rps">حجرة ورقة</p></div>
-            <div class="game-card" onclick="startGuess()"><i>❓</i><p data-key="g_guess">خمن الرقم</p></div>
-            <div class="game-card" onclick="startDice()"><i>🎲</i><p data-key="g_dice">رمي النرد</p></div>
-            <div class="game-card" onclick="startCoin()"><i>🪙</i><p data-key="g_coin">ملك أم كتابة</p></div>
-            <div class="game-card" onclick="startReaction()"><i>⚡</i><p data-key="g_reaction">سرعة الرد</p></div>
-            <div class="game-card" onclick="startColor()"><i>🎨</i><p data-key="g_color">مطابقة الألوان</p></div>
+            <div class="game-card" onclick="startClicker()"><i>👆</i><p>تحدي النقر</p></div>
+            <div class="game-card" onclick="startMath()"><i>➕</i><p>عبقري الحساب</p></div>
+            <div class="game-card" onclick="startRPS()"><i>✊</i><p>حجرة ورقة</p></div>
+            <div class="game-card" onclick="startGuess()"><i>❓</i><p>خمن الرقم</p></div>
+            <div class="game-card" onclick="startDice()"><i>🎲</i><p>رمي النرد</p></div>
+            <div class="game-card" onclick="startCoin()"><i>🪙</i><p>ملك أم كتابة</p></div>
+            <div class="game-card" onclick="startReaction()"><i>⚡</i><p>سرعة الرد</p></div>
+            <div class="game-card" onclick="startColor()"><i>🎨</i><p>مطابقة الألوان</p></div>
         </div>
         <div id="play-area" style="display:none; text-align:center; margin-top:20px;">
             <div id="game-container"></div>
-            <button class="btn btn-op" style="width:100%; margin-top:20px; height:45px;" onclick="backToMenu()" data-key="back_btn">العودة للقائمة</button>
+            <button class="btn btn-op" style="width:100%; margin-top:20px; height:45px;" onclick="backToMenu()">العودة للقائمة</button>
         </div>
     </div>
 </div>
@@ -250,8 +174,8 @@
 <div id="physics-modal" class="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal('physics-modal')">✕</span>
-        <h3 style="text-align:center; color:var(--secondary)" data-key="phys_title">محاكي الجاذبية</h3>
-        <p style="font-size:12px; text-align:center; opacity:0.7" data-key="phys_desc">انقر لإطلاق كرات الطاقة</p>
+        <h3 style="text-align:center; color:var(--secondary)">محاكي الجاذبية</h3>
+        <p style="font-size:12px; text-align:center; opacity:0.7">انقر لإطلاق كرات الطاقة</p>
         <canvas id="p-cvs" class="canvas-style" height="300"></canvas>
     </div>
 </div>
@@ -259,14 +183,14 @@
 <div id="draw-modal" class="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal('draw-modal')">✕</span>
-        <h3 style="text-align:center; color:var(--accent)" data-key="draw_title">لوحة الإبداع</h3>
+        <h3 style="text-align:center; color:var(--accent)">لوحة الإبداع</h3>
         <div class="draw-tools">
             <input type="color" id="d-color" value="#000000" title="اختر اللون">
             <input type="range" id="d-size" min="1" max="30" value="4" style="width:100px;">
             <button class="btn btn-op" style="padding:0 15px; height:40px;" onclick="setEraser()">محاية 🧽</button>
         </div>
         <canvas id="d-cvs" class="canvas-style white-bg" height="320"></canvas>
-        <button class="btn btn-del" style="width:100%; height:45px;" onclick="clearCanvas()" data-key="clear_btn">مسح اللوحة بالكامل</button>
+        <button class="btn btn-del" style="width:100%; height:45px;" onclick="clearCanvas()">مسح اللوحة بالكامل</button>
     </div>
 </div>
 
@@ -274,7 +198,6 @@
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal('timer-modal')">✕</span>
         <h3 style="text-align:center; margin-bottom:10px;">المؤقت وساعة الإيقاف</h3>
-        
         <div style="background:#1a1f2b; padding:15px; border-radius:15px; margin-bottom:15px;">
             <h4 style="color:var(--primary); text-align:center; margin-bottom:10px;">المؤقت التنازلي</h4>
             <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
@@ -285,12 +208,11 @@
             <div id="t-disp" style="font-size:50px; text-align:center; font-family:'Orbitron'; color:var(--primary); margin-bottom:15px; display:none;">05:00</div>
             <div style="display:flex; gap:10px;">
                 <button class="btn btn-op" style="flex:1" onclick="startT()">تشغيل</button>
-                <button class="btn btn-del" style="flex:1" onclick="resetT()">إيقاف / إعادة</button>
+                <button class="btn btn-del" style="flex:1" onclick="resetT()">إيقاف</button>
             </div>
         </div>
-
         <div style="background:#1a1f2b; padding:15px; border-radius:15px;">
-            <h4 style="color:var(--secondary); text-align:center; margin-bottom:10px;">ساعة إيقاف (Stopwatch)</h4>
+            <h4 style="color:var(--secondary); text-align:center; margin-bottom:10px;">ساعة إيقاف</h4>
             <div id="sw-disp" style="font-size:40px; text-align:center; font-family:'Orbitron'; color:var(--secondary); margin-bottom:15px;">00:00.00</div>
             <div style="display:flex; gap:10px;">
                 <button class="btn btn-op" style="flex:1" onclick="startSW()">تشغيل</button>
@@ -304,10 +226,10 @@
 <div id="bmi-modal" class="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal('bmi-modal')">✕</span>
-        <h3 style="text-align:center; margin-bottom:15px;" data-key="bmi_title">حاسبة الصحة والرشاقة</h3>
+        <h3 style="text-align:center; margin-bottom:15px;">حاسبة الصحة والرشاقة</h3>
         <input type="number" id="bw" placeholder="الوزن (كجم)">
         <input type="number" id="bh" placeholder="الطول (سم)">
-        <button class="btn btn-eq" style="width:100%; margin-top:10px;" onclick="calcB()" data-key="calc_btn">احسب الآن</button>
+        <button class="btn btn-eq" style="width:100%; margin-top:10px;" onclick="calcB()">احسب الآن</button>
         <div id="br" style="text-align:center; margin-top:20px; font-size:18px; font-weight:bold; color:var(--secondary)"></div>
     </div>
 </div>
@@ -315,28 +237,25 @@
 <div id="currency-modal" class="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal('currency-modal')">✕</span>
-        <h3 style="text-align:center; color:var(--secondary); margin-bottom:15px;">محول العملات (تقريبي)</h3>
+        <h3 style="text-align:center; color:var(--secondary); margin-bottom:15px;">محول العملات</h3>
         <input type="number" id="cur-amt" placeholder="المبلغ" value="1">
         <div style="display:flex; gap:10px;">
             <select id="cur-from">
-                <option value="1">USD (دولار أمريكي)</option>
+                <option value="1">USD (دولار)</option>
                 <option value="1.08">EUR (يورو)</option>
-                <option value="0.26">SAR (ريال سعودي)</option>
-                <option value="0.27">AED (درهم إماراتي)</option>
-                <option value="0.021">EGP (جنيه مصري)</option>
-                <option value="1.26">GBP (جنيه إسترليني)</option>
+                <option value="0.26">SAR (ريال)</option>
+                <option value="0.27">AED (درهم)</option>
+                <option value="0.021">EGP (جنيه)</option>
             </select>
             <span style="font-size:24px; align-self:center;">➜</span>
             <select id="cur-to">
-                <option value="0.26">SAR (ريال سعودي)</option>
-                <option value="0.021">EGP (جنيه مصري)</option>
-                <option value="0.27">AED (درهم إماراتي)</option>
-                <option value="1">USD (دولار أمريكي)</option>
-                <option value="1.08">EUR (يورو)</option>
+                <option value="0.26">SAR (ريال)</option>
+                <option value="0.021">EGP (جنيه)</option>
+                <option value="1">USD (دولار)</option>
             </select>
         </div>
         <button class="btn btn-eq" style="width:100%; margin-top:15px;" onclick="convertCur()">تحويل</button>
-        <div id="cur-res" style="text-align:center; margin-top:20px; font-size:24px; font-weight:bold; color:var(--primary); font-family:'Orbitron';"></div>
+        <div id="cur-res" style="text-align:center; margin-top:20px; font-size:24px; font-weight:bold; color:var(--primary);"></div>
     </div>
 </div>
 
@@ -353,7 +272,166 @@
 </div>
 
 <script>
-    // --- Translation System ---
-    const i18n = {
-        ar: {
-            draw_btn: "🎨 رسم", nav_physics: "فيزياء", nav_games: "ألعاب", nav_calc: "حاسبة", nav_timer: "مؤ
+// تغليف الكود بالكامل لضمان تحميل العناصر
+window.addEventListener('DOMContentLoaded', () => {
+
+    // --- Calculator Core ---
+    window.expr = ""; window.isDeg = true;
+    const dVal = document.getElementById('display-val'), dStep = document.getElementById('display-step');
+
+    window.toggleAngleMode = () => {
+        isDeg = !isDeg; document.getElementById('angle-toggle').innerText = isDeg ? "DEG" : "RAD";
+    };
+    window.sin_custom = (x) => isDeg ? Math.sin(x * Math.PI / 180) : Math.sin(x);
+    window.cos_custom = (x) => isDeg ? Math.cos(x * Math.PI / 180) : Math.cos(x);
+    window.tan_custom = (x) => isDeg ? Math.tan(x * Math.PI / 180) : Math.tan(x);
+    window.abs = Math.abs;
+
+    window.ins = (v) => { if (dVal.innerText === "0" && !isNaN(v)) expr = ""; expr += v; updateUI(); };
+    window.clr = () => { expr = ""; updateUI(); dStep.innerText = ""; dVal.innerText = "0"; };
+    window.del = () => { expr = expr.slice(0, -1); updateUI(); if(expr==="") dVal.innerText="0"; };
+    function updateUI() { dVal.innerText = expr.replace(/\*\*/g, '^'); }
+    
+    window.calculate = () => {
+        if(!expr) return;
+        let parsed = expr.replace(/×/g, '*').replace(/÷/g, '/').replace(/sin\(/g, 'sin_custom(').replace(/cos\(/g, 'cos_custom(').replace(/tan\(/g, 'tan_custom(').replace(/log\(/g, 'Math.log10(').replace(/ln\(/g, 'Math.log(').replace(/√\(/g, 'Math.sqrt(').replace(/\^/g, '**').replace(/e\*\*/g, 'Math.exp(');
+        try {
+            let safeExec = parsed;
+            let openP = (safeExec.match(/\(/g) || []).length, closeP = (safeExec.match(/\)/g) || []).length;
+            for(let i = 0; i < (openP - closeP); i++) safeExec += ")";
+            let result = eval(safeExec);
+            if(result % 1 !== 0) result = parseFloat(result.toFixed(8));
+            dStep.innerText = expr + " ="; expr = result.toString(); dVal.innerText = result;
+        } catch(e) { alert("خطأ رياضي"); }
+    };
+    window.fact = () => {
+        let n = parseInt(dVal.innerText);
+        if(isNaN(n) || n < 0) return;
+        let r = 1; for(let i=1; i<=n; i++) r *= i;
+        expr = r.toString(); dVal.innerText = r;
+    };
+
+    // --- Modals ---
+    window.openModal = (id) => { 
+        document.querySelectorAll('.modal').forEach(m => m.style.display='none');
+        const m = document.getElementById(id);
+        m.style.display = 'flex';
+        // Delay canvas initialization to ensure modal layout is rendered
+        if(id === 'draw-modal') setTimeout(initDraw, 50);
+        if(id === 'physics-modal') setTimeout(initPhysics, 50);
+    };
+    window.closeModal = (id) => { document.getElementById(id).style.display='none'; };
+
+    // --- Drawing App ---
+    let drawing = false, isEraser = false, dcvs, dctx;
+    window.initDraw = () => {
+        dcvs = document.getElementById('d-cvs'); 
+        if(!dcvs) return;
+        dctx = dcvs.getContext('2d');
+        // Fix 0px width bug when hidden
+        let w = dcvs.parentElement.clientWidth - 40;
+        if(w > 0 && dcvs.width !== w) {
+            dcvs.width = w; dcvs.height = 320;
+            // Fill background white
+            dctx.fillStyle = '#ffffff'; dctx.fillRect(0,0,dcvs.width,dcvs.height);
+        }
+        
+        const getXY = (e) => {
+            const r = dcvs.getBoundingClientRect();
+            return { 
+                x: (e.clientX || (e.touches && e.touches[0].clientX)) - r.left, 
+                y: (e.clientY || (e.touches && e.touches[0].clientY)) - r.top 
+            };
+        };
+        dcvs.onmousedown = dcvs.ontouchstart = (e) => { drawing=true; dctx.beginPath(); const p=getXY(e); dctx.moveTo(p.x, p.y); if(e.touches) e.preventDefault(); };
+        dcvs.onmouseup = dcvs.ontouchend = () => drawing=false;
+        dcvs.onmousemove = dcvs.ontouchmove = (e) => {
+            if(!drawing) return;
+            const p=getXY(e);
+            dctx.lineWidth = document.getElementById('d-size').value;
+            dctx.lineCap = 'round';
+            dctx.strokeStyle = isEraser ? '#ffffff' : document.getElementById('d-color').value;
+            dctx.lineTo(p.x, p.y); dctx.stroke();
+            if(e.touches) e.preventDefault();
+        };
+        document.getElementById('d-color').addEventListener('input', () => isEraser = false);
+    };
+    window.setEraser = () => { isEraser = true; };
+    window.clearCanvas = () => { if(dctx) { dctx.fillStyle='#ffffff'; dctx.fillRect(0,0,dcvs.width,dcvs.height); } };
+
+    // --- Physics ---
+    let pcvs, pctx, pBalls = [];
+    window.initPhysics = () => {
+        pcvs = document.getElementById('p-cvs'); pctx = pcvs.getContext('2d');
+        let w = pcvs.parentElement.clientWidth - 40;
+        if(w > 0) pcvs.width = w;
+        pBalls = [];
+    };
+    document.getElementById('p-cvs').onclick = (e) => {
+        const r = pcvs.getBoundingClientRect();
+        pBalls.push({ x: (e.clientX-r.left), y: (e.clientY-r.top), vy: 2, vx: (Math.random()-0.5)*10, r: 12, c: `hsl(${Math.random()*360}, 80%, 60%)` });
+    };
+    function pLoop() {
+        if(pctx && pBalls.length > 0) {
+            pctx.fillStyle='rgba(5,7,10,0.2)'; pctx.fillRect(0,0,pcvs.width,pcvs.height);
+            pBalls.forEach(b => {
+                b.vy += 0.5; b.x += b.vx; b.y += b.vy;
+                if(b.y > pcvs.height - b.r) { b.y = pcvs.height - b.r; b.vy *= -0.8; }
+                if(b.x > pcvs.width - b.r || b.x < b.r) b.vx *= -0.9;
+                pctx.beginPath(); pctx.arc(b.x, b.y, b.r, 0, 7); pctx.fillStyle=b.c; pctx.fill();
+            });
+        }
+        requestAnimationFrame(pLoop);
+    }
+    pLoop();
+
+    // --- Games ---
+    const gMenu = document.getElementById('game-menu'), pArea = document.getElementById('play-area'), gCont = document.getElementById('game-container');
+    window.backToMenu = () => { gMenu.style.display='grid'; pArea.style.display='none'; gCont.innerHTML = ''; };
+    const showGame = () => { gMenu.style.display='none'; pArea.style.display='block'; };
+
+    window.startTTT = () => { showGame(); gCont.innerHTML = '<div id="ttt-grid"></div>'; let turn = 'X', board = Array(9).fill(null); for(let i=0; i<9; i++) { let c = document.createElement('div'); c.className='ttt-cell'; c.onclick = () => { if(!board[i]) { board[i]=turn; c.innerText=turn; c.style.color=turn==='X'?'var(--primary)':'var(--secondary)'; turn=turn==='X'?'O':'X'; } }; gCont.querySelector('#ttt-grid').appendChild(c); } };
+    window.startClicker = () => { showGame(); let count=0; gCont.innerHTML=`<div id="target" style="width:120px;height:120px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:30px auto;font-size:40px;color:#000;cursor:pointer;">0</div>`; document.getElementById('target').onclick = function() { this.innerText = ++count; this.style.transform="scale(1.1)"; setTimeout(()=>this.style.transform="scale(1)",50); }; };
+    window.startMath = () => { showGame(); let a=Math.floor(Math.random()*50), b=Math.floor(Math.random()*50); gCont.innerHTML=`<h2>${a} + ${b} = ?</h2><input type="number" id="ans"><button class="btn btn-eq" style="width:100px;margin:10px auto;" onclick="checkM(${a+b})">تأكيد</button>`; };
+    window.checkM = (r) => { if(document.getElementById('ans').value == r) { alert("إجابة صحيحة!"); startMath(); } else alert("❌"); };
+    window.startRPS = () => { showGame(); gCont.innerHTML = `<div style="display:flex; justify-content:center; gap:15px; margin:20px 0;"><button class="btn btn-num" style="width:60px" onclick="playR('✊')">✊</button><button class="btn btn-num" style="width:60px" onclick="playR('✋')">✋</button><button class="btn btn-num" style="width:60px" onclick="playR('✌️')">✌️</button></div><div id="res-rps" style="font-size:24px; color:var(--primary)"></div>`; };
+    window.playR = (u) => { const ops=['✊','✋','✌️']; document.getElementById('res-rps').innerText=`أنت: ${u} | الحاسب: ${ops[Math.floor(Math.random()*3)]}`; };
+    window.startDice = () => { showGame(); gCont.innerHTML=`<div id="die" style="font-size:80px;">🎲</div><button class="btn btn-sci" style="margin:auto; width:120px;" onclick="document.getElementById('die').innerText = ['⚀','⚁','⚂','⚃','⚄','⚅'][Math.floor(Math.random()*6)]">نرد</button>`; };
+    window.startGuess = () => { showGame(); window.gTarget = Math.floor(Math.random()*100)+1; gCont.innerHTML = `<p>من 1 لـ 100</p><input type="number" id="g-in"><button class="btn btn-sci" onclick="checkG()" style="margin:auto;">تخمين</button><p id="g-res"></p>`; };
+    window.checkG = () => { let v = parseInt(document.getElementById('g-in').value), res = document.getElementById('g-res'); if(v===gTarget) {res.innerText="صحيح 🎉"; res.style.color="#00ff88";} else res.innerText=v>gTarget?"أصغر ⬇️":"أكبر ⬆️"; };
+    window.startCoin = () => { showGame(); gCont.innerHTML = `<div id="coin" style="font-size:80px; margin:20px;">🪙</div><button class="btn btn-op" style="margin:auto;" onclick="document.getElementById('coin').innerText=Math.random()>0.5?'👑':'📜'">اقذف</button>`; };
+    window.startReaction = () => { showGame(); gCont.innerHTML = `<div id="react-box" style="width:100%; height:150px; background:var(--danger); border-radius:15px; display:flex; align-items:center; justify-content:center; font-size:24px;">انتظر الأخضر...</div>`; const box=document.getElementById('react-box'); let startT=0; setTimeout(()=>{ box.style.background="var(--secondary)"; box.innerText="اضغط!!!"; startT=Date.now(); box.onclick=()=>{ box.innerText=`${Date.now()-startT}ms`; box.onclick=null; }; }, 1500+Math.random()*2000); };
+    window.startColor = () => { showGame(); gCont.innerHTML=`<h1 id="cm-word" style="font-size:40px;">أحمر</h1><div id="cm-opts" style="display:flex;gap:10px;justify-content:center;"></div>`; window.genCM(); };
+    window.genCM = () => { const cols=[{n:"أحمر",c:"#ff003c"},{n:"أزرق",c:"#00f2ff"},{n:"أخضر",c:"#00ff88"}]; let cw=cols[Math.floor(Math.random()*3)], cc=cols[Math.floor(Math.random()*3)]; document.getElementById('cm-word').innerText=cw.n; document.getElementById('cm-word').style.color=cc.c; let d=document.getElementById('cm-opts'); d.innerHTML=''; cols.forEach(o=>{ let b=document.createElement('button'); b.className='btn btn-num'; b.innerText=o.n; b.onclick=()=>{if(o.c===cc.c)genCM();else alert("خطأ!");}; d.appendChild(b);}); };
+
+    // --- Timer & StopWatch ---
+    let tVal = 0, tTimer = null;
+    window.startT = () => { 
+        if(tTimer) return; 
+        tVal = parseInt(document.getElementById('t-min').value||0)*60 + parseInt(document.getElementById('t-sec').value||0);
+        if(tVal<=0) return;
+        document.getElementById('t-disp').style.display='block';
+        tTimer = setInterval(()=>{
+            if(tVal<=0){ clearInterval(tTimer); tTimer=null; alert("انتهى الوقت!"); resetT(); return; }
+            tVal--; document.getElementById('t-disp').innerText = `${Math.floor(tVal/60).toString().padStart(2,'0')}:${(tVal%60).toString().padStart(2,'0')}`;
+        }, 1000);
+    };
+    window.resetT = () => { clearInterval(tTimer); tTimer=null; document.getElementById('t-disp').style.display='none'; };
+
+    let swTime = 0, swInterval = null;
+    window.startSW = () => { if(!swInterval) swInterval = setInterval(()=>{ swTime+=10; document.getElementById('sw-disp').innerText=`${Math.floor(swTime/60000).toString().padStart(2,'0')}:${Math.floor((swTime/1000)%60).toString().padStart(2,'0')}.${Math.floor((swTime%1000)/10).toString().padStart(2,'0')}`; },10); };
+    window.stopSW = () => { clearInterval(swInterval); swInterval=null; };
+    window.resetSW = () => { stopSW(); swTime=0; document.getElementById('sw-disp').innerText="00:00.00"; };
+
+    // --- Utilities ---
+    window.calcB = () => { let w=document.getElementById('bw').value, h=document.getElementById('bh').value/100; if(w&&h) { let b=(w/(h*h)).toFixed(1); document.getElementById('br').innerHTML=`BMI: ${b}<br>${b<18.5?"نقص وزن":b<25?"مثالي":"زيادة وزن"}`; } };
+    window.convertCur = () => { let v=document.getElementById('cur-amt').value, f=document.getElementById('cur-from').value, t=document.getElementById('cur-to').value; document.getElementById('cur-res').innerText=((v/f)*t).toFixed(2); };
+    window.addTask = () => { let i=document.getElementById('task-in'), t=i.value.trim(); if(t){ let d=document.createElement('div'); d.className='task-item'; d.innerHTML=`<span onclick="this.parentElement.style.opacity=0.5">${t}</span> <button class="btn btn-del" style="padding:5px;" onclick="this.parentElement.remove()">X</button>`; document.getElementById('task-list').appendChild(d); i.value=''; } };
+
+    // Language logic (English/Arabic Support simplified)
+    window.changeLang = (l) => { document.getElementById('main-html').dir = l==='ar'?'rtl':'ltr'; };
+
+});
+</script>
+</body>
+</html>

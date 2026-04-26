@@ -3,151 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Quantum Hub Pro | النسخة الشاملة</title>
+    <title>Quantum Hub Ultra</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #00f2ff;
-            --secondary: #00ff88;
-            --danger: #ff003c;
-            --dark-bg: #05070a;
-            --panel: #0f121a;
-            --btn-num: #1c212d;
-            --btn-sci: #252d3d;
-            --accent: #ff00ff;
+            --primary: #00f2ff; --secondary: #00ff88; --danger: #ff003c;
+            --dark-bg: #05070a; --panel: #0f121a; --btn-num: #1c212d;
+            --btn-sci: #252d3d; --accent: #ff00ff;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
+        body { font-family: 'Cairo', sans-serif; background: var(--dark-bg); height: 100vh; display: flex; flex-direction: column; color: #fff; overflow: hidden; }
+        header { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; background: #0a0d14; border-bottom: 2px solid var(--primary); }
+        .logo { font-family: 'Orbitron'; color: var(--primary); font-size: 18px; text-shadow: 0 0 10px var(--primary); }
+        .main-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; overflow-y: auto; }
         
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: var(--dark-bg);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            color: #fff;
-            overflow: hidden;
-        }
+        /* Calculator */
+        .calc-container { width: 100%; max-width: 420px; background: var(--panel); padding: 15px; border-radius: 25px; border: 1px solid #333; }
+        .screen { background: #000; border-radius: 18px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--primary); text-align: left; direction: ltr; }
+        #display-val { font-family: 'Orbitron'; font-size: 28px; color: #fff; min-height: 40px; overflow-x: auto; }
+        #display-step { font-size: 12px; color: var(--primary); opacity: 0.6; height: 18px; }
+        .calc-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+        .btn { height: 50px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #fff; font-size: 14px; transition: 0.2s; }
+        .btn:active { transform: scale(0.9); }
+        .btn-num { background: var(--btn-num); }
+        .btn-op { background: #161b22; color: var(--secondary); }
+        .btn-sci { background: var(--btn-sci); color: var(--primary); }
+        .btn-mode { background: #2a1a3d; color: var(--accent); font-size: 10px; }
+        .btn-eq { background: linear-gradient(135deg, var(--primary), #0066ff); grid-column: span 2; }
 
-        header {
-            padding: 12px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #0a0d14;
-            border-bottom: 2px solid var(--primary);
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
-        }
-
-        .logo { font-family: 'Orbitron'; color: var(--primary); font-size: 18px; text-shadow: 0 0 10px var(--primary); letter-spacing: 1px; }
-        
-        #lang-select {
-            background: #1a1f2b; color: var(--primary); border: 1px solid var(--primary);
-            border-radius: 8px; padding: 6px 10px; font-size: 13px; cursor: pointer; outline: none;
-        }
-
-        .main-content {
-            flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px;
-            overflow-y: auto;
-            background: radial-gradient(circle at center, #0f172a 0%, #05070a 100%);
-        }
-
-        /* Calculator Styles */
-        .calc-container {
-            width: 100%; max-width: 420px; background: var(--panel);
-            padding: 15px; border-radius: 25px; border: 1px solid #333;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-        }
-
-        .screen {
-            background: #000; border-radius: 18px; padding: 15px;
-            margin-bottom: 15px; border: 1px solid var(--primary);
-            text-align: left; direction: ltr;
-            box-shadow: inset 0 0 10px rgba(0, 242, 255, 0.1);
-        }
-        #display-val { font-family: 'Orbitron'; font-size: 32px; color: #fff; min-height: 45px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
-        #display-step { font-size: 14px; color: var(--primary); opacity: 0.6; height: 20px; }
-
-        .calc-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-        
-        .btn {
-            height: 55px; border: none; border-radius: 12px; font-family: 'Cairo', sans-serif;
-            font-weight: bold; cursor: pointer; color: #fff; font-size: 14px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; justify-content: center; align-items: center;
-        }
-        .btn:active { transform: scale(0.9); filter: brightness(1.5); }
-        
-        .btn-num { background: var(--btn-num); font-size: 20px; }
-        .btn-op { background: #161b22; color: var(--secondary); font-size: 20px; }
-        .btn-sci { background: var(--btn-sci); color: var(--primary); font-size: 12px; }
-        .btn-del { background: #3d1a1a; color: var(--danger); }
-        .btn-eq { background: linear-gradient(135deg, var(--primary), #0066ff); grid-column: span 2; font-size: 24px; box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); }
-
-        /* Navigation Bar */
-        .bottom-bar {
-            background: #0a0d14; padding: 10px 5px; display: flex; justify-content: space-around;
-            border-top: 1px solid #222; width: 100%;
-        }
-        .quick-btn { background: none; border: none; color: #888; cursor: pointer; font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: 0.3s; flex: 1; }
-        .quick-btn span:first-child { font-size: 22px; margin-bottom: 2px; }
-        .quick-btn:hover, .quick-btn.active { color: var(--primary); }
+        /* Navigation */
+        .bottom-bar { background: #0a0d14; padding: 8px; display: flex; justify-content: space-around; border-top: 1px solid #222; }
+        .quick-btn { background: none; border: none; color: #888; font-size: 10px; display: flex; flex-direction: column; align-items: center; flex: 1; cursor: pointer; }
+        .quick-btn span:first-child { font-size: 20px; }
+        .quick-btn.active { color: var(--primary); }
 
         /* Modals */
-        .modal {
-            display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center;
-            backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            background: var(--panel); width: 95%; max-width: 500px;
-            border-radius: 25px; border: 1px solid var(--primary);
-            padding: 20px; position: relative; max-height: 85vh; overflow-y: auto;
-        }
-        .close-btn { position: absolute; top: 15px; right: 15px; color: #fff; background: var(--danger); width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; border-radius: 50%; cursor: pointer; z-index: 101; font-weight: bold; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
+        .modal-content { background: var(--panel); width: 95%; max-width: 500px; border-radius: 20px; border: 1px solid var(--primary); padding: 20px; position: relative; max-height: 90vh; overflow-y: auto; }
+        .close-btn { position: absolute; top: 10px; right: 10px; background: var(--danger); color: #fff; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold; }
 
-        /* Games Grid */
-        .game-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; }
-        .game-card { 
-            background: #1a1f2b; padding: 15px 5px; border-radius: 15px; text-align: center; cursor: pointer; 
-            border: 1px solid #333; transition: 0.3s;
-        }
-        .game-card:hover { border-color: var(--primary); transform: translateY(-3px); background: #242b3d; }
-        .game-card i { font-size: 28px; display: block; margin-bottom: 8px; }
-        .game-card p { font-size: 12px; font-weight: bold; }
+        /* Drawing Pad Tools */
+        .draw-tools { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; justify-content: center; }
+        .tool-btn { width: 35px; height: 35px; border-radius: 5px; border: 1px solid #444; cursor: pointer; }
+
+        /* Games */
+        .game-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .game-card { background: #1a1f2b; padding: 15px 5px; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid #333; }
         
-        /* Canvas */
-        .canvas-style { display: block; margin: 15px auto; background: #000; border: 2px solid #333; width: 100%; border-radius: 15px; touch-action: none; }
-        .white-bg { background: #fff !important; }
-
-        input {
-            width: 100%; padding: 14px; margin: 10px 0; background: #1a1f2b; border: 1px solid var(--primary); color: #fff; border-radius: 12px; outline: none; font-size: 16px;
-        }
-
-        footer {
-            text-align: center; font-size: 11px; padding: 10px; color: #444; border-top: 1px solid #111; width: 100%; background: #05070a;
-        }
-
-        /* Specific Game Layouts */
-        #ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 200px; margin: 20px auto; }
-        .ttt-cell { width: 60px; height: 60px; background: #1a1f2b; display: flex; align-items: center; justify-content: center; font-size: 30px; font-family: 'Orbitron'; border-radius: 10px; cursor: pointer; border: 1px solid #333; }
+        input, select { width: 100%; padding: 10px; margin: 5px 0; background: #1a1f2b; border: 1px solid var(--primary); color: #fff; border-radius: 8px; }
         
+        /* Unit Converter */
+        .unit-box { background: #161b22; padding: 15px; border-radius: 15px; margin-top: 10px; }
+
+        footer { display: flex; justify-content: center; gap: 20px; background: #0a0d14; padding: 10px; border-top: 2px solid var(--accent); }
+        .mode-indicator { font-family: 'Orbitron'; color: var(--accent); font-size: 14px; font-weight: bold; }
     </style>
 </head>
-<body id="body-tag">
+<body>
 
 <header>
     <div class="logo">QUANTUM HUB</div>
-    <div style="display:flex; gap:12px; align-items:center;">
-        <select id="lang-select" onchange="changeLang(this.value)">
-            <option value="ar">العربية</option>
-            <option value="en">English</option>
-        </select>
-        <button class="btn btn-sci" onclick="openModal('draw-modal')" style="height:35px; padding: 0 15px;" data-key="draw_btn">🎨 رسم</button>
-    </div>
+    <select id="lang-select" onchange="changeLang(this.value)" style="width: 80px; margin:0;">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+    </select>
 </header>
 
 <main class="main-content">
-    <div class="calc-container" id="calculator-ui">
+    <div class="calc-container">
         <div class="screen">
             <div id="display-step"></div>
             <div id="display-val">0</div>
@@ -155,13 +78,13 @@
         <div class="calc-grid">
             <button class="btn btn-sci" onclick="ins('Math.PI')">π</button>
             <button class="btn btn-sci" onclick="ins('Math.E')">e</button>
-            <button class="btn btn-sci" onclick="ins('Math.abs(')">|x|</button>
-            <button class="btn btn-del" onclick="clr()">AC</button>
-            <button class="btn btn-del" onclick="del()">DEL</button>
+            <button class="btn btn-mode" id="angle-mode" onclick="toggleAngle()">DEG</button>
+            <button class="btn btn-op" onclick="clr()">AC</button>
+            <button class="btn btn-op" onclick="del()">DEL</button>
 
-            <button class="btn btn-sci" onclick="ins('Math.sin(')">sin</button>
-            <button class="btn btn-sci" onclick="ins('Math.cos(')">cos</button>
-            <button class="btn btn-sci" onclick="ins('Math.tan(')">tan</button>
+            <button class="btn btn-sci" onclick="sci('sin')">sin</button>
+            <button class="btn btn-sci" onclick="sci('cos')">cos</button>
+            <button class="btn btn-sci" onclick="sci('tan')">tan</button>
             <button class="btn btn-sci" onclick="ins('Math.log10(')">log</button>
             <button class="btn btn-sci" onclick="ins('Math.log(')">ln</button>
 
@@ -197,354 +120,252 @@
     </div>
 </main>
 
+<footer>
+    <div class="mode-indicator">SYSTEM READY</div>
+    <div class="mode-indicator" id="footer-angle">DEGREE MODE</div>
+</footer>
+
 <div class="bottom-bar">
-    <button class="quick-btn" onclick="openModal('physics-modal')"><span>⚛️</span><span data-key="nav_physics">فيزياء</span></button>
+    <button class="quick-btn" onclick="openModal('units-modal')"><span>⚖️</span><span data-key="nav_units">محول</span></button>
     <button class="quick-btn" onclick="openModal('game-modal')"><span>🎮</span><span data-key="nav_games">ألعاب</span></button>
-    <button class="quick-btn active" onclick="location.reload()"><span>🔢</span><span data-key="nav_calc">حاسبة</span></button>
+    <button class="quick-btn" onclick="openModal('draw-modal')"><span>🎨</span><span data-key="nav_draw">رسم</span></button>
     <button class="quick-btn" onclick="openModal('timer-modal')"><span>⏱️</span><span data-key="nav_timer">مؤقت</span></button>
     <button class="quick-btn" onclick="openModal('bmi-modal')"><span>💪</span><span data-key="nav_health">صحتي</span></button>
 </div>
 
-<footer>
-    <p data-key="footer_1">تم التطوير بواسطة Quantum Hub Pro - 2024</p>
-    <p data-key="footer_2">جميع الحقوق محفوظة | نسخة بريميوم</p>
-</footer>
-
-<!-- Modals Section -->
-<div id="game-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal('game-modal')">✕</span>
-        <h3 style="text-align:center; color:var(--primary)" data-key="game_title">مركز الألعاب الـ 18</h3>
-        <div id="game-menu" class="game-grid">
-            <div class="game-card" onclick="startTTT()"><i>❌</i><p>XO</p></div>
-            <div class="game-card" onclick="startClicker()"><i>👆</i><p data-key="g_click">تحدي النقر</p></div>
-            <div class="game-card" onclick="startMath()"><i>➕</i><p data-key="g_math">عبقري الحساب</p></div>
-            <div class="game-card" onclick="startRPS()"><i>✊</i><p data-key="g_rps">حجرة ورقة</p></div>
-            <div class="game-card" onclick="startGuess()"><i>❓</i><p data-key="g_guess">قريبا..</p></div>
-            <div class="game-card" onclick="startDice()"><i>🎲</i><p data-key="g_dice">رمي النرد</p></div>
-            <div class="game-card" onclick="startReaction()"><i>⚡</i><p data-key="g_reaction">سرعة الرد</p></div>
-        </div>
-        <div id="play-area" style="display:none; text-align:center; margin-top:20px;">
-            <div id="game-container"></div>
-            <button class="btn btn-op" style="width:100%; margin-top:20px; height:45px;" onclick="backToMenu()" data-key="back_btn">العودة للقائمة</button>
-        </div>
-    </div>
-</div>
-
-<div id="physics-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal('physics-modal')">✕</span>
-        <h3 style="text-align:center; color:var(--secondary)" data-key="phys_title">محاكي الجاذبية الكوانتي</h3>
-        <p style="font-size:12px; text-align:center; opacity:0.7" data-key="phys_desc">انقر داخل المربع لإطلاق كرات الطاقة</p>
-        <canvas id="p-cvs" class="canvas-style" height="300"></canvas>
-    </div>
-</div>
-
 <div id="draw-modal" class="modal">
     <div class="modal-content">
-        <span class="close-btn" onclick="closeModal('draw-modal')">✕</span>
-        <h3 style="text-align:center; color:var(--accent)" data-key="draw_title">لوحة الإبداع</h3>
-        <canvas id="d-cvs" class="canvas-style white-bg" height="350"></canvas>
-        <button class="btn btn-del" style="width:100%; height:45px;" onclick="clearCanvas()" data-key="clear_btn">مسح اللوحة</button>
+        <button class="close-btn" onclick="closeModal('draw-modal')">✕</button>
+        <h3 style="text-align:center; color:var(--primary)">لوحة الرسم المتطورة</h3>
+        <div class="draw-tools">
+            <input type="color" id="pen-color" class="tool-btn" value="#00f2ff">
+            <button class="btn btn-sci" style="width:40px" onclick="setEraser()">🧽</button>
+            <button class="btn btn-sci" style="width:40px" onclick="setPen()">✏️</button>
+            <input type="range" id="pen-width" min="1" max="20" value="5" style="width:80px">
+        </div>
+        <canvas id="d-cvs" style="background:#fff; border-radius:10px; width:100%; height:300px; touch-action:none;"></canvas>
+        <button class="btn btn-del" style="width:100%; margin-top:10px; background:var(--danger)" onclick="clearCanvas()">مسح الكل</button>
+    </div>
+</div>
+
+<div id="game-modal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('game-modal')">✕</button>
+        <div id="game-menu" class="game-grid">
+            <div class="game-card" onclick="startTTT()">❌<p>XO</p></div>
+            <div class="game-card" onclick="startSnake()">🐍<p>الثعبان</p></div>
+            <div class="game-card" onclick="startMemory()">🧠<p>ذاكرة</p></div>
+            <div class="game-card" onclick="startMath()">➕<p>تحدي</p></div>
+            <div class="game-card" onclick="startRPS()">✊<p>RPS</p></div>
+            <div class="game-card" onclick="startClick()">⚡<p>سرعة</p></div>
+        </div>
+        <div id="play-area" style="display:none; text-align:center;">
+            <div id="game-container"></div>
+            <button class="btn btn-op" style="width:100%; margin-top:15px" onclick="backToMenu()">رجوع</button>
+        </div>
     </div>
 </div>
 
 <div id="timer-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal('timer-modal')">✕</span>
-        <h3 style="text-align:center; margin-bottom:20px;" data-key="nav_timer">المؤقت الذكي</h3>
-        <div id="t-disp" style="font-size:70px; text-align:center; font-family:'Orbitron'; color:var(--primary); margin-bottom:20px;">05:00</div>
+    <div class="modal-content" style="text-align:center;">
+        <button class="close-btn" onclick="closeModal('timer-modal')">✕</button>
+        <h3 data-key="nav_timer">المؤقت</h3>
+        <div id="t-disp" style="font-size:60px; font-family:'Orbitron'; color:var(--primary); margin:20px 0;">00:00</div>
+        <div style="display:flex; gap:5px; margin-bottom:15px;">
+            <input type="number" id="t-min" placeholder="دقائق" min="0" value="5">
+            <input type="number" id="t-sec" placeholder="ثواني" min="0" max="59" value="0">
+        </div>
         <div style="display:flex; gap:10px;">
-            <button class="btn btn-op" style="flex:1" onclick="startT()" data-key="start_btn">ابدأ</button>
-            <button class="btn btn-del" style="flex:1" onclick="resetT()">إعادة</button>
+            <button class="btn btn-eq" style="flex:1" onclick="startT()">ابدأ</button>
+            <button class="btn btn-del" style="flex:1; background:var(--danger)" onclick="resetT()">إعادة</button>
+        </div>
+    </div>
+</div>
+
+<div id="units-modal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('units-modal')">✕</button>
+        <h3>محول الوحدات الذكي</h3>
+        <div class="unit-box">
+            <label>من كيلومتر إلى متر</label>
+            <input type="number" id="km-in" oninput="convertUnits('km')" placeholder="أدخل كم">
+            <div id="m-out" style="color:var(--secondary); margin-top:5px;">النتيجة: 0 متر</div>
+        </div>
+        <div class="unit-box">
+            <label>من دولار إلى ريال (تقديري)</label>
+            <input type="number" id="usd-in" oninput="convertUnits('usd')" placeholder="أدخل $">
+            <div id="sar-out" style="color:var(--secondary); margin-top:5px;">النتيجة: 0 ريال</div>
         </div>
     </div>
 </div>
 
 <div id="bmi-modal" class="modal">
     <div class="modal-content">
-        <span class="close-btn" onclick="closeModal('bmi-modal')">✕</span>
-        <h3 style="text-align:center; margin-bottom:15px;" data-key="bmi_title">حاسبة الصحة والرشاقة</h3>
+        <button class="close-btn" onclick="closeModal('bmi-modal')">✕</button>
+        <h3>حاسبة مؤشر الكتلة</h3>
         <input type="number" id="bw" placeholder="الوزن (كجم)">
         <input type="number" id="bh" placeholder="الطول (سم)">
-        <button class="btn btn-eq" style="width:100%; margin-top:10px;" onclick="calcB()" data-key="calc_btn">احسب الآن</button>
-        <div id="br" style="text-align:center; margin-top:20px; font-size:18px; font-weight:bold; color:var(--secondary)"></div>
+        <button class="btn btn-eq" style="width:100%;" onclick="calcB()">احسب</button>
+        <div id="br" style="text-align:center; margin-top:15px; font-size:20px;"></div>
     </div>
 </div>
 
 <script>
-    // --- Translation System ---
-    const i18n = {
-        ar: {
-            draw_btn: "🎨 رسم",
-            nav_physics: "فيزياء",
-            nav_games: "ألعاب",
-            nav_calc: "حاسبة",
-            nav_timer: "مؤقت",
-            nav_health: "صحتي",
-            game_title: "مركز الألعاب الـ 18",
-            g_click: "تحدي النقر",
-            g_math: "عبقري الحساب",
-            g_rps: "حجرة ورقة",
-            g_guess: "خمن الرقم",
-            g_dice: "رمي النرد",
-            g_coin: "ملك أم كتابة",
-            g_color: "مطابقة الألوان",
-            g_reaction: "سرعة الرد",
-            g_soon: "قريباً",
-            back_btn: "العودة للقائمة",
-            phys_title: "محاكي الجاذبية الكوانتي",
-            phys_desc: "انقر داخل المربع لإطلاق كرات الطاقة",
-            draw_title: "لوحة الإبداع",
-            clear_btn: "مسح اللوحة",
-            start_btn: "ابدأ",
-            bmi_title: "حاسبة الصحة والرشاقة",
-            calc_btn: "احسب الآن",
-            footer_1: "تم التطوير بواسطة Quantum Hub Pro - 2024",
-            footer_2: "جميع الحقوق محفوظة | نسخة بريميوم",
-            error_msg: "خطأ رياضي",
-            done_msg: "انتهى الوقت!",
-            win_msg: "أحسنت! فوز ساحق",
-            correct_msg: "إجابة صحيحة عبقرية!"
-        },
-        en: {
-            draw_btn: "🎨 Draw",
-            nav_physics: "Physics",
-            nav_games: "Games",
-            nav_calc: "Calc",
-            nav_timer: "Timer",
-            nav_health: "Health",
-            game_title: "18 Games Center",
-            g_click: "Click Challenge",
-            g_math: "Math Genius",
-            g_rps: "Rock Paper",
-            g_guess: "Guess Number",
-            g_dice: "Roll Dice",
-            g_coin: "Head or Tail",
-            g_color: "Color Match",
-            g_reaction: "Reaction Speed",
-            g_soon: "Soon",
-            back_btn: "Back to Menu",
-            phys_title: "Quantum Gravity",
-            phys_desc: "Click inside to launch energy balls",
-            draw_title: "Creation Board",
-            clear_btn: "Clear Board",
-            start_btn: "Start",
-            bmi_title: "Health & BMI Calc",
-            calc_btn: "Calculate Now",
-            error_msg: "Math Error",
-            done_msg: "Time is up!",
-            win_msg: "Great! You Won",
-            correct_msg: "Genius Correct Answer!"
-        }
-    };
-
-    let currentLang = 'ar';
-
-    function changeLang(lang) {
-        currentLang = lang;
-        const html = document.getElementById('main-html');
-        html.lang = lang;
-        html.dir = lang === 'ar' ? 'rtl' : 'ltr';
-        
-        document.querySelectorAll('[data-key]').forEach(el => {
-            const key = el.getAttribute('data-key');
-            if (i18n[lang][key]) el.innerText = i18n[lang][key];
-        });
-
-        // Update Placeholders
-        document.getElementById('bw').placeholder = lang === 'en' ? "Weight (kg)" : "الوزن (كجم)";
-        document.getElementById('bh').placeholder = lang === 'en' ? "Height (cm)" : "الطول (سم)";
-    }
-
-    // --- Calculator Core ---
+    // --- Global Logic ---
+    let angleMode = 'DEG';
     let expr = "";
     const dVal = document.getElementById('display-val');
     const dStep = document.getElementById('display-step');
 
-    function ins(v) { 
-        if (dVal.innerText === "0" && !isNaN(v)) expr = "";
-        expr += v; updateUI(); 
+    function toggleAngle() {
+        angleMode = angleMode === 'DEG' ? 'RAD' : 'DEG';
+        document.getElementById('angle-mode').innerText = angleMode;
+        document.getElementById('footer-angle').innerText = angleMode + " MODE";
     }
-    function clr() { expr = ""; updateUI(); dStep.innerText = ""; dVal.innerText = "0"; }
-    function del() { expr = expr.slice(0, -1); updateUI(); if(expr==="") dVal.innerText="0"; }
-    function updateUI() { 
-        let view = expr.replace(/Math\./g, '').replace(/\*\*/g, '^');
-        if(expr !== "") dVal.innerText = view; 
+
+    function ins(v) { if(dVal.innerText==="0" && !isNaN(v)) expr=""; expr += v; updateUI(); }
+    function clr() { expr = ""; dVal.innerText = "0"; dStep.innerText = ""; }
+    function del() { expr = expr.slice(0,-1); updateUI(); if(!expr) dVal.innerText="0"; }
+    function updateUI() { dVal.innerText = expr.replace(/Math\./g, '').replace(/\*\*/g, '^'); }
+
+    function sci(fn) {
+        if(angleMode === 'DEG') {
+            ins(`Math.${fn}((Math.PI/180)*`);
+        } else {
+            ins(`Math.${fn}(`);
+        }
     }
+
     function calculate() {
         try {
+            // Auto-close brackets
+            let openBrackets = (expr.match(/\(/g) || []).length;
+            let closeBrackets = (expr.match(/\)/g) || []).length;
+            for(let i=0; i < openBrackets - closeBrackets; i++) expr += ")";
+            
             let res = eval(expr);
             dStep.innerText = dVal.innerText + " =";
             expr = res.toString();
             dVal.innerText = res;
-        } catch(e) { 
-            alert(i18n[currentLang].error_msg); 
-            clr();
-        }
+        } catch(e) { alert("خطأ في العملية"); clr(); }
     }
+
     function fact() {
         let n = parseInt(eval(expr));
-        if(isNaN(n) || n < 0) return;
         let r = 1; for(let i=1; i<=n; i++) r *= i;
-        expr = r.toString(); dVal.innerText = r;
+        expr = r.toString(); updateUI();
     }
 
-    // --- Modal Management ---
-    function openModal(id) { 
-        document.querySelectorAll('.modal').forEach(m => m.style.display='none');
-        document.getElementById(id).style.display='flex';
-        if(id==='draw-modal') setTimeout(initDraw, 100);
-        if(id==='physics-modal') { pBalls = []; }
-    }
-    function closeModal(id) { document.getElementById(id).style.display='none'; }
+    // --- Drawing Pad ---
+    const dcvs = document.getElementById('d-cvs'), dctx = dcvs.getContext('2d');
+    let drawing = false, isEraser = false;
 
-    // --- Physics System ---
-    const pcvs = document.getElementById('p-cvs'), pctx = pcvs.getContext('2d');
-    let pBalls = [];
-    pcvs.width = 400; // Fixed visual width
-    pcvs.onclick = (e) => {
-        const r = pcvs.getBoundingClientRect();
-        const scaleX = pcvs.width / r.width;
-        const scaleY = pcvs.height / r.height;
-        pBalls.push({ 
-            x: (e.clientX-r.left) * scaleX, 
-            y: (e.clientY-r.top) * scaleY, 
-            vy: 2, vx: (Math.random()-0.5)*10, 
-            r: 12, c: `hsl(${Math.random()*360}, 80%, 60%)` 
-        });
-    };
-    function pLoop() {
-        pctx.fillStyle='rgba(5,7,10,0.2)'; pctx.fillRect(0,0,pcvs.width,pcvs.height);
-        pBalls.forEach(b => {
-            b.vy += 0.5; b.x += b.vx; b.y += b.vy;
-            if(b.y > pcvs.height - b.r) { b.y = pcvs.height - b.r; b.vy *= -0.8; }
-            if(b.x > pcvs.width - b.r || b.x < b.r) b.vx *= -0.9;
-            pctx.beginPath(); pctx.arc(b.x, b.y, b.r, 0, 7); 
-            pctx.shadowBlur = 10; pctx.shadowColor = b.c;
-            pctx.fillStyle=b.c; pctx.fill();
-            pctx.shadowBlur = 0;
-        });
-        requestAnimationFrame(pLoop);
-    }
-    pLoop();
-
-    // --- Games Logic ---
-    const gMenu = document.getElementById('game-menu');
-    const pArea = document.getElementById('play-area');
-    const gCont = document.getElementById('game-container');
-
-    function backToMenu() { gMenu.style.display='grid'; pArea.style.display='none'; gCont.innerHTML = ''; }
-    function showGame() { gMenu.style.display='none'; pArea.style.display='block'; }
-
-    function startTTT() {
-        showGame(); gCont.innerHTML = '<div id="ttt-grid"></div>';
-        let turn = 'X'; let board = Array(9).fill(null);
-        for(let i=0; i<9; i++) {
-            let c = document.createElement('div'); c.className='ttt-cell';
-            c.onclick = () => {
-                if(!board[i]) {
-                    board[i]=turn; c.innerText=turn; c.style.color=turn==='X'?'var(--primary)':'var(--secondary)';
-                    turn=turn==='X'?'O':'X';
-                }
-            };
-            gCont.querySelector('#ttt-grid').appendChild(c);
-        }
-    }
-    function startClicker() { 
-        showGame(); let count=0; 
-        gCont.innerHTML=`<div id="target" style="width:120px;height:120px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:30px auto;font-size:40px;color:#000;cursor:pointer;box-shadow:0 0 20px var(--primary);">0</div>`;
-        document.getElementById('target').onclick = function() { this.innerText = ++count; this.style.transform = "scale(1.1)"; setTimeout(()=>this.style.transform="scale(1)", 50); };
-    }
-    function startMath() { 
-        showGame(); let a=Math.floor(Math.random()*50), b=Math.floor(Math.random()*50); 
-        gCont.innerHTML=`<h2 style="margin-bottom:15px;">${a} + ${b} = ?</h2><input type="number" id="ans" autofocus><button class="btn btn-eq" style="width:100px;margin:10px auto;" onclick="checkM(${a+b})">OK</button>`; 
-    }
-    window.checkM = (r) => { if(document.getElementById('ans').value == r) { alert(i18n[currentLang].correct_msg); startMath(); } else { alert("❌"); } };
-    
-    function startRPS() {
-        showGame();
-        gCont.innerHTML = `
-            <div style="display:flex; justify-content:center; gap:15px; margin:20px 0;">
-                <button class="btn btn-num" style="width:60px" onclick="playR('✊')">✊</button>
-                <button class="btn btn-num" style="width:60px" onclick="playR('✋')">✋</button>
-                <button class="btn btn-num" style="width:60px" onclick="playR('✌️')">✌️</button>
-            </div>
-            <div id="res-rps" style="font-size:20px; font-weight:bold; color:var(--primary)"></div>
-        `;
-    }
-    window.playR = (u) => {
-        const ops = ['✊', '✋', '✌️']; const c = ops[Math.floor(Math.random()*3)];
-        document.getElementById('res-rps').innerText = `${u} VS ${c}`;
-    };
-
-    function startDice() { showGame(); gCont.innerHTML=`<div id="die" style="font-size:80px; margin:20px;">🎲</div><button class="btn btn-sci" style="margin:auto; width:120px;" onclick="rollD()">Roll</button>`; }
-    window.rollD = () => { document.getElementById('die').innerText = Math.floor(Math.random()*6)+1; };
-
-    function startReaction() {
-        showGame(); gCont.innerHTML = `<div id="react-box" style="width:100%; height:150px; background:var(--danger); border-radius:15px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:24px; font-weight:bold;">WAIT...</div>`;
-        const box = document.getElementById('react-box');
-        let startT = 0;
-        setTimeout(() => {
-            box.style.background = "var(--secondary)"; box.innerText = "CLICK NOW!!!";
-            startT = Date.now();
-            box.onclick = () => {
-                let diff = Date.now() - startT;
-                alert(`${diff} ms`);
-                startReaction();
-            };
-        }, 1500 + Math.random() * 3000);
-    }
-
-    // --- Drawing Engine ---
-    let drawing = false;
     function initDraw() {
-        const dcvs = document.getElementById('d-cvs'), dctx = dcvs.getContext('2d');
-        dcvs.width = dcvs.offsetWidth;
-        const getXY = (e) => {
+        dcvs.width = dcvs.offsetWidth; dcvs.height = 300;
+        dctx.lineCap = 'round'; dctx.lineJoin = 'round';
+        
+        const start = (e) => {
+            drawing = true; dctx.beginPath();
             const r = dcvs.getBoundingClientRect();
             const x = (e.clientX || e.touches[0].clientX) - r.left;
             const y = (e.clientY || e.touches[0].clientY) - r.top;
-            return { x, y };
+            dctx.moveTo(x, y);
         };
-        dcvs.onmousedown = dcvs.ontouchstart = (e) => { drawing=true; dctx.beginPath(); const p=getXY(e); dctx.moveTo(p.x, p.y); if(e.touches) e.preventDefault(); };
-        dcvs.onmouseup = dcvs.ontouchend = () => drawing=false;
-        dcvs.onmousemove = dcvs.ontouchmove = (e) => {
+        const move = (e) => {
             if(!drawing) return;
-            const p=getXY(e); dctx.lineWidth=4; dctx.lineCap='round'; dctx.strokeStyle='#000';
-            dctx.lineTo(p.x, p.y); dctx.stroke();
+            const r = dcvs.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - r.left;
+            const y = (e.clientY || e.touches[0].clientY) - r.top;
+            dctx.strokeStyle = isEraser ? '#ffffff' : document.getElementById('pen-color').value;
+            dctx.lineWidth = document.getElementById('pen-width').value;
+            dctx.lineTo(x, y); dctx.stroke();
             if(e.touches) e.preventDefault();
         };
+        dcvs.onmousedown = dcvs.ontouchstart = start;
+        dcvs.onmousemove = dcvs.ontouchmove = move;
+        window.onmouseup = window.ontouchend = () => drawing = false;
     }
-    function clearCanvas() { const c=document.getElementById('d-cvs'); c.getContext('2d').clearRect(0,0,c.width,c.height); }
+    function setEraser() { isEraser = true; }
+    function setPen() { isEraser = false; }
+    function clearCanvas() { dctx.clearRect(0,0,dcvs.width,dcvs.height); }
+
+    // --- Games ---
+    function openModal(id) { 
+        document.querySelectorAll('.modal').forEach(m => m.style.display='none');
+        document.getElementById(id).style.display='flex';
+        if(id==='draw-modal') setTimeout(initDraw, 200);
+    }
+    function closeModal(id) { document.getElementById(id).style.display='none'; }
+    function backToMenu() { document.getElementById('game-menu').style.display='grid'; document.getElementById('play-area').style.display='none'; clearInterval(gameInt); }
+
+    let gameInt;
+    function startSnake() {
+        document.getElementById('game-menu').style.display='none';
+        document.getElementById('play-area').style.display='block';
+        const cont = document.getElementById('game-container');
+        cont.innerHTML = '<canvas id="s-cvs" width="280" height="280" style="background:#000; border:1px solid var(--primary)"></canvas>';
+        const scvs = document.getElementById('s-cvs'), sctx = scvs.getContext('2d');
+        let snake = [{x:10, y:10}], food = {x:15, y:15}, dx=1, dy=0, size=20, box=14;
+        
+        gameInt = setInterval(() => {
+            let head = {x: snake[0].x + dx, y: snake[0].y + dy};
+            if(head.x < 0 || head.x >= size || head.y < 0 || head.y >= size) return backToMenu();
+            snake.unshift(head);
+            if(head.x === food.x && head.y === food.y) food = {x: Math.floor(Math.random()*size), y: Math.floor(Math.random()*size)};
+            else snake.pop();
+            
+            sctx.fillStyle='#000'; sctx.fillRect(0,0,280,280);
+            sctx.fillStyle='red'; sctx.fillRect(food.x*box, food.y*box, box, box);
+            sctx.fillStyle='#00ff88'; snake.forEach(s => sctx.fillRect(s.x*box, s.y*box, box, box));
+        }, 150);
+
+        window.onkeydown = (e) => {
+            if(e.key==='ArrowUp' && dy===0){dx=0; dy=-1;}
+            if(e.key==='ArrowDown' && dy===0){dx=0; dy=1;}
+            if(e.key==='ArrowLeft' && dx===0){dx=-1; dy=0;}
+            if(e.key==='ArrowRight' && dx===0){dx=1; dy=0;}
+        };
+    }
 
     // --- Utilities ---
-    function calcB() { 
-        let w = document.getElementById('bw').value;
-        let h = document.getElementById('bh').value / 100;
-        if(w && h) {
-            let bmi = (w / (h * h)).toFixed(1);
-            let cat = bmi < 18.5 ? "Underweight" : bmi < 25 ? "Healthy" : "Overweight";
-            if(currentLang === 'ar') cat = bmi < 18.5 ? "نقص وزن" : bmi < 25 ? "وزن مثالي" : "زيادة وزن";
-            document.getElementById('br').innerHTML = `BMI: ${bmi}<br><span style="color:var(--primary)">${cat}</span>`;
+    let tTimer;
+    function startT() {
+        clearInterval(tTimer);
+        let m = parseInt(document.getElementById('t-min').value) || 0;
+        let s = parseInt(document.getElementById('t-sec').value) || 0;
+        let total = m * 60 + s;
+        tTimer = setInterval(() => {
+            if(total <= 0) { clearInterval(tTimer); alert("انتهى الوقت!"); return; }
+            total--;
+            let dm = Math.floor(total/60).toString().padStart(2,'0');
+            let ds = (total%60).toString().padStart(2,'0');
+            document.getElementById('t-disp').innerText = `${dm}:${ds}`;
+        }, 1000);
+    }
+    function resetT() { clearInterval(tTimer); document.getElementById('t-disp').innerText="00:00"; }
+
+    function convertUnits(type) {
+        if(type === 'km') {
+            let val = document.getElementById('km-in').value;
+            document.getElementById('m-out').innerText = `النتيجة: ${val * 1000} متر`;
+        } else {
+            let val = document.getElementById('usd-in').value;
+            document.getElementById('sar-out').innerText = `النتيجة: ${val * 3.75} ريال`;
         }
     }
 
-    let tVal = 300, tTimer = null;
-    function startT() {
-        if(tTimer) return;
-        tTimer = setInterval(() => {
-            if(tVal <= 0) { clearInterval(tTimer); tTimer=null; alert(i18n[currentLang].done_msg); return; }
-            tVal--;
-            let m = Math.floor(tVal/60).toString().padStart(2,'0');
-            let s = (tVal%60).toString().padStart(2,'0');
-            document.getElementById('t-disp').innerText = `${m}:${s}`;
-        }, 1000);
+    function calcB() {
+        let w = document.getElementById('bw').value, h = document.getElementById('bh').value/100;
+        let res = (w/(h*h)).toFixed(1);
+        document.getElementById('br').innerText = "BMI: " + res;
     }
-    function resetT() { clearInterval(tTimer); tTimer=null; tVal=300; document.getElementById('t-disp').innerText="05:00"; }
 
-    // Pre-load Arabic UI
-    window.onload = () => { changeLang('ar'); };
+    function changeLang(l) {
+        const ar = l === 'ar';
+        document.body.dir = ar ? 'rtl' : 'ltr';
+        // Add more translation logic if needed
+    }
 </script>
+
 </body>
 </html>
